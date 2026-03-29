@@ -68,16 +68,16 @@ function showResult() {
     });
   });
 
-  // 방법 2: .result가 없는 경우 (강점발견 등) #result 내 직접 카드
+  // 방법 2: checkbox 기반 워크숍 (강점발견) — 체크한 항목으로 동적 카드 생성
   if (!found) {
-    // EX-28: 강점발견 — checkbox 0개 체크 시 모순 메시지 방지
     var checkboxes = document.querySelectorAll('input[type="checkbox"].option__input');
     if (checkboxes.length > 0) {
-      var anyChecked = Array.from(checkboxes).some(function(cb) { return cb.checked; });
-      if (!anyChecked) {
-        // 0개 체크 → "체크한 것이 강점" 대신 대안 카드
-        var bodyClass = document.body.className || '';
-        var cardCls = 'card-esteem';
+      var checked = Array.from(checkboxes).filter(function(cb) { return cb.checked; });
+      var msgArea = document.getElementById('result-message-area');
+      var cardCls = 'card-esteem';
+
+      if (checked.length === 0) {
+        // 0개 체크 → 대안 카드
         area.innerHTML =
           '<div style="padding:24px 24px 0;"><div class="result-card ' + cardCls + '">' +
           '<span class="result-card__decoration">— · —</span>' +
@@ -87,20 +87,53 @@ function showResult() {
           '<p class="result-card__message">"아직 잘 모르겠어도 괜찮아.<br>강점은 천천히<br>발견할 수 있어."</p>' +
           '<span class="result-card__decoration">— · —</span>' +
           '<span class="result-card__watermark">maum-workshop.github.io</span>' +
-          '</div></div>' +
+          '</div></div>';
+        if (msgArea) msgArea.innerHTML =
           '<div class="character-guide" style="margin-top:20px;">' +
           '<span class="maumi-placeholder">◡</span>' +
           '<div class="speech-bubble">지금 모르겠어도 괜찮아. 살다 보면 자연스럽게 발견하게 될 거야.</div></div>';
-        found = true;
-      }
-    }
+      } else {
+        // 체크한 항목 텍스트 수집
+        var items = checked.map(function(cb) {
+          var label = document.querySelector('label[for="' + cb.id + '"]');
+          var textEl = label ? label.querySelector('.option__text') : null;
+          return textEl ? textEl.textContent.trim() : '';
+        }).filter(function(t) { return t; });
 
-    if (!found) {
-      var directCard = document.querySelector('#result .result-card');
-      if (directCard) {
-        area.appendChild(directCard.cloneNode(true));
-        found = true;
+        // 카드 메시지: 체크한 개수 기반
+        var count = items.length;
+        var cardMsg = count + '개의 강점을 발견했어요!';
+        var listHtml = items.map(function(t) { return '<li style="list-style:disc;margin-left:16px;line-height:1.8;">' + t + '</li>'; }).join('');
+
+        area.innerHTML =
+          '<div style="padding:24px 24px 0;"><div class="result-card ' + cardCls + '">' +
+          '<span class="result-card__decoration">— · —</span>' +
+          '<span class="result-card__title">나의 숨겨진 강점</span>' +
+          '<div class="result-card__main"><span class="result-card__emoji" style="font-size:48px;color:#F5A623;"><span class="material-symbols-rounded filled">star</span></span></div>' +
+          '<span class="maumi-placeholder maumi-placeholder--small">◕</span>' +
+          '<p class="result-card__message">"' + cardMsg + '"</p>' +
+          '<span class="result-card__decoration">— · —</span>' +
+          '<span class="result-card__watermark">maum-workshop.github.io</span>' +
+          '</div></div>';
+
+        // 체크한 강점 목록 + 마음이 대사
+        if (msgArea) msgArea.innerHTML =
+          '<div style="padding:16px 24px 0;">' +
+          '<ul style="background:#FAFAFA;border-radius:12px;padding:16px 16px 16px 24px;font-size:14px;color:#444;">' + listHtml + '</ul></div>' +
+          '<div class="character-guide" style="margin-top:20px;">' +
+          '<span class="maumi-placeholder">◕</span>' +
+          '<div class="speech-bubble">방금 체크한 것들, 전부 네 강점이야.<br>혹시 몰랐다면, 이제 기억해둬.</div></div>';
       }
+      found = true;
+    }
+  }
+
+  // 방법 2-b: #result 내 직접 카드 (하드코딩된 카드가 있는 경우)
+  if (!found) {
+    var directCard = document.querySelector('#result .result-card');
+    if (directCard) {
+      area.appendChild(directCard.cloneNode(true));
+      found = true;
     }
   }
 

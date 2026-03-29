@@ -132,30 +132,8 @@
     <div class="progress-bar"><div class="progress-bar__fill" style="width:100%"></div><span class="progress-bar__text">6/6</span></div>
     <div class="result-congrats"><span class="maumi-placeholder anim-bounce" style="margin:0 auto;">◕</span><p class="result-congrats__text">워크숍 완료!</p></div>
     <div id="result-card-area"></div>
-
-    <!-- checkbox는 CSS만으로 복합 분기 어려움 → 공통 결과 카드 -->
-    <div style="padding:24px 24px 0;">
-      <div class="result-card card-esteem">
-        <span class="result-card__decoration">— · —</span>
-        <span class="result-card__title">나의 숨겨진 강점</span>
-        <div class="result-card__main">
-          <span class="result-card__emoji" style="font-size:48px;">✨</span>
-        </div>
-        <span class="maumi-placeholder maumi-placeholder--small">◕</span>
-        <p class="result-card__message">"체크한 것 하나하나가<br>당신의 강점이에요."</p>
-        <span class="result-card__decoration">— · —</span>
-        <span class="result-card__watermark">maum-workshop.github.io</span>
-      </div>
-    </div>
-
-    <div class="character-guide" style="margin-top:20px;">
-      <span class="maumi-placeholder">◕</span>
-      <div class="speech-bubble">
-        방금 체크한 것들, 전부 네 강점이야.<br>
-        혹시 몰랐다면, 이제 기억해둬.<br>
-        이런 강점이 있는 사람이야.
-      </div>
-    </div>
+    <!-- 결과 카드는 showResult()에서 동적 생성 -->
+    <div id="result-message-area"></div>
 
     <p class="result-share-guide"><span class="material-symbols-rounded" aria-hidden="true">photo_camera</span> 캡처해서 저장하거나 공유해봐!</p>
     <p class="result-share-guide result-share-guide--noforce">안 해도 괜찮아.</p>
