@@ -1,0 +1,380 @@
+/* ================================================
+   마음 워크숍 — workshop.css
+   :target 단계 전환 · :checked 결과 분기 · 선택지 UI
+   리커트 · 카드 · 슬라이더 · 탭 전환 · textarea
+   ================================================ */
+
+/* ── :target 기반 단계 전환 ── */
+/* 모든 섹션 기본 숨김 */
+.ws-section {
+  display: none;
+  animation: fadeIn 0.4s ease-in;
+}
+
+/* 해시 없을 때: 첫 섹션만 표시 */
+.ws-section:first-of-type {
+  display: block;
+}
+
+/* 해시 있을 때: 해당 섹션만 표시 */
+.ws-section:target {
+  display: block;
+}
+
+/* 핵심: :target이 존재하면 나머지 전부 숨김 */
+/* → "같이 해보자" 버튼 등 이전 단계가 남는 문제 해결 */
+form:has(.ws-section:target) .ws-section:not(:target) {
+  display: none;
+}
+
+/* ── Radio / Checkbox 선택지 ── */
+.option-list {
+  padding: 0 24px;
+}
+.option__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.option__label {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #333;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.option__label:active {
+  transform: scale(0.98);
+}
+
+/* indicator (○ 원형 — radio) */
+.option__indicator {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #D0D0D0;
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+/* indicator (□ 사각 — checkbox) */
+.option__checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #D0D0D0;
+  border-radius: 4px;
+  margin-right: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: transparent;
+}
+
+.option__text {
+  flex: 1;
+}
+.option__check {
+  display: none;
+  margin-left: auto;
+  color: var(--color);
+  font-weight: 700;
+  padding-left: 8px;
+}
+
+/* 선택됨 상태 — radio */
+.option__input:checked + .option__label {
+  background: var(--light);
+  border-color: var(--color);
+}
+.option__input:checked + .option__label .option__indicator {
+  background: var(--color);
+  border-color: var(--color);
+}
+.option__input:checked + .option__label .option__check {
+  display: block;
+}
+
+/* 선택됨 상태 — checkbox */
+.option__input:checked + .option__label .option__checkbox {
+  background: var(--color);
+  border-color: var(--color);
+  color: #fff;
+}
+
+/* Focus 상태 */
+.option__input:focus + .option__label {
+  outline: 2px solid var(--color);
+  outline-offset: 2px;
+}
+
+/* ── 리커트 5점 척도 ── */
+.likert {
+  border: none;
+  padding: 20px 24px;
+  border-bottom: 1px solid #F0F0F0;
+}
+.likert__question {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #333;
+  margin-bottom: 16px;
+}
+.likert__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+  padding: 0 8px;
+}
+.likert__scale {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+.likert__input {
+  position: absolute;
+  opacity: 0;
+}
+.likert__dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+}
+.likert__dot::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border: 2px solid #D0D0D0;
+  border-radius: 50%;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+.likert__dot span {
+  font-size: 12px;
+  color: #BBB;
+}
+.likert__input:checked + .likert__dot::before {
+  width: 28px;
+  height: 28px;
+  background: var(--color);
+  border-color: var(--color);
+}
+
+/* ── 카드 2×2 선택 ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 24px;
+}
+.card-grid__input {
+  position: absolute;
+  opacity: 0;
+}
+.card-grid__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-decoration: none;
+}
+.card-grid__emoji { font-size: 32px; margin-bottom: 8px; }
+.card-grid__title { font-size: 15px; font-weight: 700; color: #333; }
+.card-grid__sub { font-size: 13px; color: #666; }
+
+.card-grid__input:checked + .card-grid__card {
+  border: 2px solid var(--color);
+  background: var(--light);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.card-grid__input:checked + .card-grid__card::after {
+  content: "✓";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  color: var(--color);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ── 슬라이더 (Range) ── */
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  margin: 16px 0;
+}
+.slider-group__label {
+  font-size: 13px;
+  color: #999;
+  flex-shrink: 0;
+}
+.slider-group__input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #E0E0E0;
+  border-radius: 2px;
+  outline: none;
+}
+.slider-group__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color);
+  cursor: pointer;
+}
+.slider-group__input::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color);
+  cursor: pointer;
+  border: none;
+}
+
+/* ── 탭 전환 (직접 쓰기 / 골라 쓰기) ── */
+.tab {
+  padding: 0 24px;
+}
+.tab__input {
+  position: absolute;
+  opacity: 0;
+}
+.tab__header {
+  display: flex;
+  margin-bottom: 16px;
+}
+.tab__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border-bottom: 1px solid #E0E0E0;
+  color: #999;
+  transition: all 0.2s;
+}
+.tab__input:checked + .tab__label {
+  color: var(--color);
+  border-bottom: 2px solid var(--color);
+}
+.tab-write { display: none; }
+.tab-select { display: block; }
+#tab-write:checked ~ .tab-write { display: block; }
+#tab-write:checked ~ .tab-select { display: none; }
+#tab-select:checked ~ .tab-write { display: none; }
+#tab-select:checked ~ .tab-select { display: block; }
+
+/* ── Textarea 자유 서술 ── */
+.textarea-group {
+  padding: 0 24px;
+  margin: 16px 0;
+}
+.textarea-group__input {
+  width: 100%;
+  padding: 16px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+  border: 1px solid #E0E0E0;
+  border-radius: 12px;
+  resize: none;
+  font-family: inherit;
+  background: #fff;
+}
+.textarea-group__input:focus {
+  border-color: var(--color);
+  outline: none;
+}
+.textarea-group__input::placeholder {
+  color: #BBB;
+}
+.textarea-group__note {
+  font-size: 12px;
+  color: #BBB;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ── <details> 스타일 ── */
+.explore-card {
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  margin: 0 24px 8px;
+  transition: all 0.2s;
+}
+.explore-card summary {
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  color: #333;
+}
+.explore-card summary::-webkit-details-marker { display: none; }
+.explore-card summary::before {
+  content: "▸ ";
+  color: var(--color);
+}
+.explore-card[open] summary::before { content: "▾ "; }
+.explore-card__body {
+  padding: 0 16px 16px;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+.explore-card[open] {
+  border-color: var(--color);
+  background: var(--light);
+}
+
+/* ── 질문 제목 ── */
+.question-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 400;
+  color: #333;
+  padding: 0 24px;
+  margin: 16px 0 12px;
+  line-height: 1.5;
+}
+.question-sub {
+  font-size: 13px;
+  color: var(--color);
+  padding: 0 24px;
+  margin-bottom: 4px;
+}

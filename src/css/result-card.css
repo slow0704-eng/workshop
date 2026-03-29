@@ -1,0 +1,261 @@
+/* ================================================
+   마음 워크숍 — result-card.css
+   결과 카드 · 검열자 대응 · 실천 가이드 · 추천
+   ================================================ */
+
+/* ── 결과 변형 (기본 숨김, :checked 시 표시) ── */
+.result { display: none; }
+
+/* 질문 섹션(Q4 등) 안에서 :checked 시 결과 카드가 보이지만
+   사용자에게는 안 보이도록 처리.
+   시각적으로 숨기되 DOM에는 존재 → showResult()가 찾을 수 있음 */
+.ws-section:not(#result) .result {
+  position: absolute;
+  left: -9999px;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ── 결과 축하 헤더 ── */
+.result-congrats {
+  text-align: center;
+  padding: 24px 24px 8px;
+}
+.result-congrats__text {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--color);
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+}
+
+/* ── 결과 카드 영역 (JS로 복사된 카드가 표시됨) ── */
+#result-card-area {
+  padding: 0 24px;
+  margin-bottom: 8px;
+}
+#result-card-area .result-card {
+  margin: 0 auto;
+}
+/* 복사된 카드 내 character-guide 애니메이션 제거 (중복 방지) */
+#result-card-area .character-guide {
+  animation: none;
+}
+
+/* ── 결과 카드+액션 바 통합 컨테이너 ── */
+.result-card-group {
+  padding: 0 24px;
+  margin-bottom: 20px;
+}
+
+/* 카드 하단 radius 제거 → 액션 바와 연결 */
+.result-card-group .result-card {
+  border-radius: 16px 16px 0 0;
+  margin: 0 auto;
+}
+
+/* 액션 바 (카드에 밀착) */
+.result-actions {
+  display: flex;
+  gap: 1px;
+  max-width: 340px;
+  margin: 0 auto;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  background: var(--color);
+}
+.result-actions__btn {
+  flex: 1;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--light);
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+.result-actions__btn:active {
+  background: #fff;
+}
+.result-actions__btn--saved {
+  background: var(--color) !important;
+  color: #fff !important;
+}
+
+/* 캐릭터 공감 영역 */
+.result-empathy {
+  padding: 0 0 8px;
+}
+
+/* "안 해도 괜찮아" 가벼운 안내 */
+.result-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #BBB;
+  padding: 4px 24px 0;
+}
+
+/* ── 결과 카드 ── */
+.result-card {
+  aspect-ratio: 1 / 1;
+  max-width: 340px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  animation: slideUp 0.5s ease-out;
+}
+
+/* 카테고리별 카드 배경 */
+.result-card.card-emotion    { background: #EBF4FF; }
+.result-card.card-esteem     { background: #FFF8E1; }
+.result-card.card-relation   { background: #E8F5E9; }
+.result-card.card-stress     { background: #F3E5F5; }
+.result-card.card-career     { background: #FFF3E0; }
+.result-card.card-resilience { background: #FCE4EC; }
+
+.result-card__decoration {
+  font-size: 14px;
+  color: #ccc;
+  letter-spacing: 4px;
+}
+.result-card__title {
+  font-size: 14px;
+  color: #666;
+  margin-top: 4px;
+}
+.result-card__main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.result-card__number {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 400;
+  color: #333;
+}
+.result-card__emoji {
+  font-size: 32px;
+}
+.result-card__message {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 400;
+  color: #333;
+  line-height: 1.6;
+  padding: 0 8px;
+}
+.result-card__watermark {
+  font-size: 12px;
+  color: #BBB;
+  margin-top: 4px;
+}
+
+/* ── 결과 안내 문구 ── */
+.result-share-guide {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  padding: 16px 24px 0;
+}
+.result-share-guide--noforce {
+  margin-top: 4px;
+}
+
+/* ── 실천 가이드 ── */
+.practice-guide {
+  margin: 16px 24px;
+}
+.practice-guide__list {
+  background: #FAFAFA;
+  border-radius: 12px;
+  padding: 20px 20px 20px 36px;
+  margin-top: 12px;
+  font-size: 15px;
+  color: #444;
+  line-height: 2.0;
+}
+.practice-guide__list li {
+  list-style: decimal;
+}
+
+/* ── 다음 워크숍 추천 ── */
+.next-workshop {
+  padding: 0 24px;
+}
+.next-workshop__heading {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 12px;
+}
+.next-workshop__item {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid #F0F0F0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+.next-workshop__item:hover {
+  border-color: var(--color);
+}
+.next-workshop__emoji {
+  font-size: 24px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.next-workshop__info {
+  flex: 1;
+}
+.next-workshop__title {
+  font-size: 15px;
+  font-weight: 700;
+  display: block;
+}
+.next-workshop__meta {
+  font-size: 12px;
+  color: #999;
+}
+.next-workshop__arrow {
+  margin-left: auto;
+  color: #999;
+  font-size: 16px;
+}
+
+/* ── EX-09: 가로모드 결과 카드 대응 ── */
+@media (orientation: landscape) and (max-height: 500px) {
+  .result-card {
+    aspect-ratio: auto;
+    max-height: 80vh;
+    padding: 20px 24px;
+  }
+}
+
+/* ── 챌린지 진행 시각화 ── */
+.challenge-progress {
+  text-align: center;
+  padding: 16px 24px;
+}
+.challenge-progress__dots {
+  font-size: 16px;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
