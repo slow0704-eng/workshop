@@ -205,6 +205,17 @@ form:has(.ws-section:target) .ws-section:not(:target) {
   text-decoration: none;
 }
 .card-grid__emoji { font-size: 32px; margin-bottom: 8px; }
+
+/* card-grid 내부 반응·결과가 2열에 갇히지 않도록 전폭 확장 */
+.card-grid .reaction,
+.card-grid .result {
+  grid-column: 1 / -1;
+}
+/* card-grid 내부 반응의 말풍선 max-width 보정 (padding 제거) */
+.card-grid .reaction .character-guide {
+  margin-left: 0;
+  margin-right: 0;
+}
 .card-grid__title { font-size: 15px; font-weight: 700; color: #333; }
 .card-grid__sub { font-size: 13px; color: #666; }
 

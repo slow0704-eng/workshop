@@ -82,7 +82,7 @@ function showResult() {
           '<div style="padding:24px 24px 0;"><div class="result-card ' + cardCls + '">' +
           '<span class="result-card__decoration">— · —</span>' +
           '<span class="result-card__title">나의 숨겨진 강점</span>' +
-          '<div class="result-card__main"><span class="result-card__emoji" style="font-size:48px;">🌱</span></div>' +
+          '<div class="result-card__main"><span class="result-card__emoji material-symbols-rounded filled" style="font-size:48px;color:#4CAF50;">eco</span></div>' +
           '<span class="maumi-placeholder maumi-placeholder--small">◡</span>' +
           '<p class="result-card__message">"아직 잘 모르겠어도 괜찮아.<br>강점은 천천히<br>발견할 수 있어."</p>' +
           '<span class="result-card__decoration">— · —</span>' +
@@ -138,7 +138,7 @@ function showResult() {
         '<div style="padding:24px 24px 0;"><div class="result-card ' + cardClass + '">' +
         '<span class="result-card__decoration">— · —</span>' +
         '<span class="result-card__title">워크숍 결과</span>' +
-        '<div class="result-card__main"><span class="result-card__emoji" style="font-size:48px;">🤷</span></div>' +
+        '<div class="result-card__main"><span class="result-card__emoji material-symbols-rounded filled" style="font-size:48px;color:#999;">help</span></div>' +
         '<span class="maumi-placeholder maumi-placeholder--small">◡</span>' +
         '<p class="result-card__message">"지금은 잘 모르겠어도<br>괜찮아. 여기까지 온 것<br>만으로도 충분해."</p>' +
         '<span class="result-card__decoration">— · —</span>' +
@@ -248,7 +248,7 @@ function saveResultImage() {
   // EX-04: 버튼 연타 방지
   if (btn.disabled) return;
   btn.disabled = true;
-  btn.textContent = '⏳ 저장 중...';
+  btn.innerHTML = '<span class="material-symbols-rounded" aria-hidden="true">hourglass_empty</span> 저장 중...';
 
   // DOM에서 텍스트 추출
   var titleEl = card.querySelector('.result-card__title');
@@ -366,10 +366,10 @@ function saveResultImage() {
       canvas.toBlob(function(blob) {
         var url = URL.createObjectURL(blob);
         window.open(url, '_blank');
-        btn.textContent = '📸 길게 눌러 저장!';
+        btn.innerHTML = '<span class="material-symbols-rounded" aria-hidden="true">photo_camera</span> 길게 눌러 저장!';
         btn.disabled = false;
         setTimeout(function() {
-          btn.textContent = '📸 이미지 저장';
+          btn.innerHTML = '<span class="material-symbols-rounded" aria-hidden="true">photo_camera</span> 이미지 저장';
           btn.classList.remove('result-actions__btn--saved');
         }, 4000);
       }, 'image/png');
@@ -379,16 +379,16 @@ function saveResultImage() {
       link.download = 'maum-workshop-result.png';  // EX-19: 영문 파일명
       link.href = canvas.toDataURL('image/png');
       link.click();
-      btn.textContent = '✓ 저장됨!';
+      btn.innerHTML = '<span class="material-symbols-rounded" aria-hidden="true">check</span> 저장됨!';
       btn.classList.add('result-actions__btn--saved');
       setTimeout(function() {
-        btn.textContent = '📸 이미지 저장';
+        btn.innerHTML = '<span class="material-symbols-rounded" aria-hidden="true">photo_camera</span> 이미지 저장';
         btn.classList.remove('result-actions__btn--saved');
         btn.disabled = false;  // EX-04: 복원
       }, 2500);
     }
   } catch (e) {
-    btn.textContent = '📸 이미지 저장';
+    btn.innerHTML = '<span class="material-symbols-rounded" aria-hidden="true">photo_camera</span> 이미지 저장';
     btn.disabled = false;
     alert('저장에 실패했어요. 스크린샷으로 저장해주세요!');
   }

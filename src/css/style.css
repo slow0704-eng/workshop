@@ -450,3 +450,30 @@ button.share-panel__btn:active {
 .full-item__title { font-size: 15px; font-weight: 700; display: block; }
 .full-item__meta { font-size: 12px; color: #999; }
 .full-item__arrow { color: #999; font-size: 16px; }
+
+/* ── Material Symbols 기본 설정 ── */
+.material-symbols-rounded {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-size: 20px;
+  vertical-align: middle;
+  color: inherit;
+  line-height: 1;
+}
+.material-symbols-rounded.filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.icon-lg { font-size: 48px; display: block; text-align: center; }
+.icon-md { font-size: 32px; }
+.icon-sm { font-size: 24px; }
+
+/* ── 감정 색상 CSS 도트 (감정체크 이모지 대체) ── */
+.color-dot {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--dot-color);
+  vertical-align: middle;
+  margin-right: 2px;
+  border: 1.5px solid rgba(0,0,0,0.08);
+}
