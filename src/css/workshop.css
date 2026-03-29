@@ -248,19 +248,25 @@ form:has(.ws-section:target) .ws-section:not(:target) {
 .slider-group__input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--color);
   cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 .slider-group__input::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--color);
   cursor: pointer;
   border: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+/* 슬라이더 터치 시 수평 스크롤 방지 */
+.slider-group__input {
+  touch-action: pan-y;
 }
 
 /* ── 탭 전환 (직접 쓰기 / 골라 쓰기) ── */

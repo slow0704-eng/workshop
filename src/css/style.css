@@ -20,6 +20,13 @@ body.category-resilience { --color: #E91E63; --light: #FCE4EC; }
 /* ── 리셋 & 기본 ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  /* :target 이동 시 sticky 헤더 아래로 숨지 않도록 */
+  scroll-padding-top: 56px;
+  /* 노치폰 safe area 대응 */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
 body {
   font-family: var(--font-body);
   color: #333;
@@ -29,6 +36,13 @@ body {
   line-height: 1.8;
   font-size: 15px;
   letter-spacing: -0.01em;
+  /* 가로모드 전환 시 텍스트 크기 자동변경 방지 */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* 모바일 탭 하이라이트 제거 (커스텀 피드백 사용) */
+  -webkit-tap-highlight-color: transparent;
+  /* 풀다운 새로고침 오동작 방지 */
+  overscroll-behavior-y: contain;
 }
 
 /* ── 제목·감성 폰트 (고운돋움) ── */
@@ -63,7 +77,7 @@ main {
   justify-content: space-between;
   align-items: center;
   height: 48px;
-  padding: 0 24px;
+  padding: 0 max(24px, env(safe-area-inset-left)) 0 max(24px, env(safe-area-inset-right));
   background: #fff;
   border-bottom: 1px solid #E0E0E0;
 }
@@ -148,9 +162,9 @@ main {
 }
 
 .footer-disclaimer {
-  font-size: 10px;
+  font-size: 11px;
   color: #CCC;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 /* ── 버튼 ── */
@@ -171,9 +185,9 @@ main {
   cursor: pointer;
   transition: opacity 0.2s;
 }
-.btn-primary:hover,
-.btn-primary:active { opacity: 0.85; }
-.btn-primary:focus { outline: 2px solid var(--color); outline-offset: 2px; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-primary:active { opacity: 0.7; transform: scale(0.98); }
+.btn-primary:focus-visible { outline: 2px solid var(--color); outline-offset: 2px; }
 
 .share-actions {
   display: flex;
@@ -197,6 +211,7 @@ main {
   transition: opacity 0.2s;
 }
 .btn-secondary:hover { opacity: 0.8; }
+.btn-secondary:active { opacity: 0.6; transform: scale(0.97); }
 
 /* ── 진행률 바 ── */
 .progress-bar {
@@ -355,6 +370,21 @@ button.share-panel__btn:active {
 .anim-pulse { animation: pulse 1.5s ease-in-out infinite; }
 .anim-bounce { animation: bounce 0.6s ease-out; }
 
+/* ── 아주 작은 화면 (SE, 갤럭시 폴드 커버) ── */
+@media (max-width: 360px) {
+  body { font-size: 14px; }
+  .btn-primary { height: 48px; line-height: 48px; font-size: 15px; }
+  .hero__title { font-size: 24px; }
+  .hero__slogan { font-size: 16px; }
+}
+
+/* ── 가로모드 ── */
+@media (orientation: landscape) and (max-height: 500px) {
+  .header { height: 40px; }
+  main { padding-top: 40px; }
+  .hero { padding: 24px 24px 16px; }
+}
+
 /* ── 반응형 (PC) ── */
 @media (min-width: 640px) {
   body { background: #FAFAFA; }
@@ -374,3 +404,49 @@ button.share-panel__btn:active {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── 메인 페이지 (index.html) ── */
+.hero {
+  text-align: center;
+  padding: 48px 24px 32px;
+  background: #fff;
+}
+.hero__title { font-size: 28px; font-weight: 700; margin-top: 16px; }
+.hero__slogan { font-size: 18px; color: var(--color); margin-top: 8px; }
+.hero__desc { font-size: 14px; color: #666; margin-top: 12px; line-height: 1.6; }
+.hero__tags { font-size: 12px; color: #999; margin-top: 8px; }
+
+.section-title {
+  font-size: 18px; font-weight: 700; padding: 0 24px;
+  margin: 32px 0 16px; color: #333;
+}
+.section-desc { font-size: 14px; color: #666; padding: 0 24px; margin-bottom: 16px; }
+
+.mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 24px; }
+.mini-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 20px 12px; background: #fff; border: 1px solid #E0E0E0;
+  border-radius: 12px; text-decoration: none; color: #333;
+  transition: border-color 0.2s; position: relative;
+}
+.mini-card:hover { border-color: var(--color); }
+.mini-card__emoji { font-size: 32px; margin-bottom: 8px; }
+.mini-card__title { font-size: 14px; font-weight: 700; text-align: center; line-height: 1.3; }
+.mini-card__meta { font-size: 11px; color: #999; margin-top: 6px; }
+.mini-card__badge {
+  position: absolute; top: 8px; left: 8px;
+  font-size: 9px; font-weight: 700; padding: 2px 6px;
+  border-radius: 7px; background: var(--color); color: #fff;
+}
+
+.full-list { padding: 0 24px; }
+.full-item {
+  display: flex; align-items: center; padding: 16px 0;
+  border-bottom: 1px solid #F0F0F0; text-decoration: none; color: #333;
+}
+.full-item:last-child { border-bottom: none; }
+.full-item__emoji { font-size: 24px; margin-right: 12px; flex-shrink: 0; }
+.full-item__info { flex: 1; }
+.full-item__title { font-size: 15px; font-weight: 700; display: block; }
+.full-item__meta { font-size: 12px; color: #999; }
+.full-item__arrow { color: #999; font-size: 16px; }
