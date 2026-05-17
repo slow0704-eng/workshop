@@ -1,5 +1,13 @@
 {
-  "dependencies": {
+  "name": "maum-workshop",
+  "version": "0.3.0",
+  "description": "마음 워크숍 — 5분, 나를 만나는 시간",
+  "private": true,
+  "scripts": {
+    "dev": "npx http-server src -p 8080 -c-1",
+    "test": "node test-capture.js"
+  },
+  "devDependencies": {
     "puppeteer": "^24.39.1"
   }
 }

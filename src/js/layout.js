@@ -51,10 +51,26 @@
       '<p class="footer-disclaimer">본 서비스는 전문 의료 서비스가 아닙니다.</p>';
   }
 
+  /* ── :has() 폴백 ──
+     workshop.css는 form:has(.ws-section:target) { ... }로 단계 전환을 처리.
+     iOS 15.4+ / Android 11+ Chrome 105+ 미만 환경에서는 :has() 미지원이라
+     URL 해시가 바뀌어도 다른 섹션이 숨겨지지 않음. JS로 form.has-target
+     클래스를 hash 유무에 따라 토글하면 CSS가 같은 규칙을 그 클래스에도
+     적용하도록 보조 셀렉터를 둘 수 있음. */
+  function updateTargetMode() {
+    var forms = document.querySelectorAll('main form');
+    var hasHash = !!window.location.hash && window.location.hash !== '#';
+    forms.forEach(function (form) {
+      form.classList.toggle('has-target', hasHash);
+    });
+  }
+
   function init() {
     var root = detectRoot();
     renderSiteHeader(root);
     renderSiteFooter();
+    updateTargetMode();
+    window.addEventListener('hashchange', updateTargetMode);
   }
 
   if (document.readyState === 'loading') {

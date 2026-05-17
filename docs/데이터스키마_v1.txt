@@ -1,0 +1,246 @@
+================================================================
+        마음 워크숍 — 데이터 시트 스키마 명세
+        v1.0 (2026-05-18 기준)
+================================================================
+
+본 문서는 src/data/*.js 가 정의하는 window.WORKSHOP 객체의
+표준 스키마를 명세합니다. 모든 워크숍은 이 형식을 따라야 하며
+renderer.js는 본 스키마만 처리합니다 (다른 형식은 미지원).
+
+
+────────────────────────────────────────────────────────────────
+1. 최상위 구조
+────────────────────────────────────────────────────────────────
+
+  window.WORKSHOP = {
+    id,          // 영문 식별자 (예: 'energy-level')
+    title,       // 화면 표시 제목
+    category,    // emotion | esteem | relation | stress | career | resilience
+    duration,    // '1분', '3~5분' 등 표시용
+    type,        // 'mini' | 'full'
+
+    steps:    [ ... ],     // 진행 단계 배열 (3절)
+    results:  { ... },     // 결과 매핑 (4절)
+    guide:    { speech, items },   // 실천 가이드 (선택)
+    next:     [ ... ],     // 후속 워크숍 추천 (선택)
+    share:    { text, url } // SNS 공유 메타 (선택)
+  }
+
+
+────────────────────────────────────────────────────────────────
+2. 캐릭터 대사 객체 (공통)
+────────────────────────────────────────────────────────────────
+
+  { expression, speech }
+
+  expression: 표정 코드 (한 글자 텍스트)
+    ◡ — 기본 미소 / 안내·중립
+    ◠ — 살짝 강조 / 다음 단계 안내
+    ◕ — 활기·응원 / 긍정 결과·축하
+    ♡ — 공감·위로 / 부정 결과·힘들 때
+    ✦ — 놀람·발견 / 예상 외·새로운 시도
+
+  speech: 한국어 텍스트 (개행 \n 가능, 직접 <br>는 사용 금지 — renderer가 변환)
+
+  ★ 주의: 'face', 'text' 키는 사용하지 않습니다. (v3에서 폐기)
+
+
+────────────────────────────────────────────────────────────────
+3. steps 단계 타입
+────────────────────────────────────────────────────────────────
+
+  steps 배열은 순서대로 화면에 표시됩니다. 마지막은 항상 'result'.
+
+  ■ intro — 도입 화면
+
+    { type: 'intro',
+      id,                  // CSS 앵커
+      icon,                // Material Symbols 이름 (예: 'cloud')
+      iconFilled,          // true | false (선택, 기본 true)
+      expression, speech,  // 캐릭터
+      permission,          // '답은 저장되지 않아요' 같은 안내문
+      nextId,              // 다음 단계 id
+      nextLabel            // 버튼 라벨 (기본 '같이 해보자! →')
+    }
+
+  ■ explore — 개념 안내 카드 펼침
+
+    { type: 'explore',
+      id,
+      expression, speech,
+      cards: [
+        { icon?, title, body }, ...
+      ],
+      nextId
+    }
+
+  ■ question — 단일 질문 (mini 워크숍용 단순형)
+
+    { type: 'question',
+      id,
+      progress: { current, total },   // 진행률 (선택)
+      sub,                            // 'Q1' 같은 소제목
+      title,
+      expression, speech,             // (선택) 질문 위 캐릭터
+      options:   [ ... ],             // 5절
+      reactions: { ... },             // 5절 (선택)
+      resultMap: { ... },             // 6절 (마지막 질문만)
+      nextId,                         // null이면 마지막 (자동으로 #result로)
+      nextLabel
+    }
+
+  ■ experience — 복합 질문 (full 워크숍용)
+
+    { type: 'experience',
+      id, progress, expression, speech,
+      questions: [
+        { id, type, sub, title, options, reactions, resultMap, ... }, ...
+      ],
+      textarea: { ... },              // (선택) 자유 서술
+      tab:      { ... },              // (선택) 직접쓰기/골라쓰기 탭
+      nextId, nextLabel
+    }
+
+  ■ result — 결과 화면 (필수, 마지막)
+
+    { type: 'result', id: 'result' }
+
+
+────────────────────────────────────────────────────────────────
+4. results 결과 매핑
+────────────────────────────────────────────────────────────────
+
+  ■ 라디오/카드 매핑형
+
+    results: {
+      type: 'mapped',                 // 또는 'radio-mapped' (동의어)
+      cardTitle: '결과 카드 제목',    // 모든 카드 공통
+
+      items: {
+        '<result-id>': {
+          number,                     // (선택) '85%' 등 큰 수치
+          emoji,                      // 이모지 또는 SVG 문자열
+          emojiType,                  // 'svg' | 'material' | 'text'
+          emojiColor,                 // (material 타입일 때 색)
+          expression,                 // 마음이 표정
+          message,                    // 카드 본문 (HTML 허용: <br>)
+          speeches: [                 // 카드 뒤 캐릭터 대사
+            { expression, speech, marginTop?, fontSize? }, ...
+          ],
+          guide: [ '...', '...', '...' ]  // (선택) 결과별 실천 가이드
+        },
+        ...
+      }
+    }
+
+  ■ Checkbox 동적형 (강점발견)
+
+    results: {
+      type: 'checkbox-dynamic',
+      cardTitle, zeroMessage, zeroSpeech, foundMessage, foundSpeech,
+      tiers: [
+        { min, label, speech }, ...   // 체크 수에 따른 등급
+      ]
+    }
+
+
+────────────────────────────────────────────────────────────────
+5. options & reactions
+────────────────────────────────────────────────────────────────
+
+  ■ 옵션 (radio / checkbox / card-grid 공통)
+
+    {
+      id,                   // 고유 id (DOM input id로 사용)
+      text,                 // (radio/checkbox) 라벨 텍스트
+      title, sub,           // (card-grid) 카드 타이틀
+      icon,                 // (card-grid) Material Symbols
+      dots: [               // (선택) 텍스트 앞 색상 점
+        { color: '#XXXXXX' }, ...
+      ],
+      value                 // (선택) 점수 계산용 임의 값
+    }
+
+  ■ 반응 (선택 시 표시되는 캐릭터 대사)
+
+    reactions: {
+      '<option-id>': {
+        id,                 // (선택) reaction div id, 미지정 시 'r-<option-id>'
+        expression, speech
+      },
+      ...
+    }
+
+  ★ 주의: 옵션 내부 'reaction' 인라인 형식은 v3에서 폐기되었습니다.
+         반응은 반드시 질문 레벨의 'reactions' 객체에 작성하세요.
+
+
+────────────────────────────────────────────────────────────────
+6. resultMap
+────────────────────────────────────────────────────────────────
+
+  마지막 질문이 결과를 결정할 때:
+
+    resultMap: {
+      '<option-id>': '<result-id>',
+      ...
+    }
+
+  ★ renderer.js는 결과 .result div에
+    data-result-for="<option-id>" 속성을 자동으로 부여합니다.
+    result.js는 이 속성으로 카드를 찾으므로
+    정규식 CSS 파싱 없이 정확하게 매칭됩니다.
+
+
+────────────────────────────────────────────────────────────────
+7. tab (직접쓰기 / 골라쓰기, 5년후엽서 등)
+────────────────────────────────────────────────────────────────
+
+  tab: {
+    guide:       { expression, speech },   // (선택) 탭 상단 안내
+    defaultTab:  'select' | 'write',       // 초기 탭
+
+    writeTab: {
+      guide:       { expression, speech },
+      placeholder, rows, note
+    },
+
+    selectTab: {
+      guide:       { expression, speech },
+      name,                                // 라디오 그룹명
+      options:     [ { id, text }, ... ],
+      reaction:    { id, expression, speech },   // 어떤 옵션을 골라도 나오는 응원
+      extraCaption,                              // (선택) 추가 입력 안내
+      extraTextarea: { placeholder, rows }       // (선택) 추가 자유 서술
+    }
+  }
+
+
+────────────────────────────────────────────────────────────────
+8. 새 워크숍 추가 체크리스트
+────────────────────────────────────────────────────────────────
+
+  □ src/data/<id>.js — window.WORKSHOP 표준 스키마로 작성
+  □ src/mini/<id>.html  또는  src/workshop/<id>.html  — 헤더/본문 동일 형식
+    · <body class="category-<카테고리>">
+    · <header id="site-header"></header>
+    · <main id="app"></main>
+    · <footer id="site-footer"></footer>
+    · <script src="../js/layout.js"></script>
+    · <script src="../data/<id>.js"></script>
+    · <script src="../js/renderer.js"></script>
+    · <script src="../js/result.js"></script>
+  □ src/index.html 의 카드 목록에 링크 추가
+  □ 다른 워크숍의 next[] 에 상호 참조 추가 (선택)
+  □ 브라우저 확인 — `npm run dev` 후 http://localhost:8080
+
+
+================================================================
+  본 스키마는 v3.0 콘텐츠 매트릭스와 함께 데이터 시트 형식을
+  단일 표준으로 통일한 후 작성되었습니다.
+
+  참조:
+  - 콘텐츠매트릭스 v3.0
+  - src/data/energy-level.js (스키마 reference 구현)
+  - src/js/renderer.js
+================================================================

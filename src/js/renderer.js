@@ -140,8 +140,10 @@
     return div;
   }
 
-  function renderResultBlock(id, data, category) {
-    var outer = h('div', { className: 'result', id: id });
+  function renderResultBlock(id, data, category, triggerId) {
+    var attrs = { className: 'result', id: id };
+    if (triggerId) attrs['data-result-for'] = triggerId;
+    var outer = h('div', attrs);
     var padDiv = h('div', { style: { padding: '24px 24px 0' } });
     var cardClass = 'result-card card-' + category;
     var card = h('div', { className: cardClass });
@@ -414,6 +416,7 @@
 
       // 결과 블록 (형제로 삽입) — items[] / 직접 / card 하위 모두 지원
       // 결과 블록 — 표준: ws.results.items[resId]
+      // 각 카드에 data-result-for="<opt-id>" 속성 부여 → result.js가 정규식 없이 찾음
       if (q.resultMap && ws.results && ws.results.items) {
         Object.keys(q.resultMap).forEach(function (optId) {
           var resId = q.resultMap[optId];
@@ -422,7 +425,7 @@
             var blockData = {};
             Object.keys(resData).forEach(function (k) { blockData[k] = resData[k]; });
             if (!blockData.title) blockData.title = ws.results.cardTitle || '';
-            container.appendChild(renderResultBlock(resId, blockData, ws.category));
+            container.appendChild(renderResultBlock(resId, blockData, ws.category, optId));
           }
           cssRules.push('#' + optId + ':checked ~ #' + resId + ' { display:block; }');
         });

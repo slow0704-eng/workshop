@@ -23,7 +23,10 @@
 
 /* 핵심: :target이 존재하면 나머지 전부 숨김 */
 /* → "같이 해보자" 버튼 등 이전 단계가 남는 문제 해결 */
-form:has(.ws-section:target) .ws-section:not(:target) {
+/* :has() 미지원 환경(iOS 15.4 미만 등)에서는 layout.js가 form.has-target
+   클래스를 토글하여 동일 규칙이 적용되도록 폴백 selector 병기 */
+form:has(.ws-section:target) .ws-section:not(:target),
+form.has-target .ws-section:not(:target) {
   display: none;
 }
 
