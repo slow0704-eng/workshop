@@ -1,7 +1,8 @@
 /* ================================================
    마음 워크숍 — 데이터 시트
    감정 체크 (category: emotion / mini)
-   v3: 감정 옵션 6→8, 색상 카드 3→4, Q4 시간성 추가
+   ================================================
+   표준 스키마: energy-level.js 헤더 참조
    ================================================ */
 
 window.WORKSHOP = {
@@ -12,7 +13,6 @@ window.WORKSHOP = {
   type: "mini",
 
   steps: [
-    // ── 1. 시작 ──
     {
       type: "intro",
       id: "start",
@@ -25,7 +25,6 @@ window.WORKSHOP = {
       nextLabel: "같이 해보자! →"
     },
 
-    // ── 2. Q1: 감정 선택 (v3: 6→8) ──
     {
       type: "experience",
       id: "q1",
@@ -61,7 +60,6 @@ window.WORKSHOP = {
       nextId: "q2"
     },
 
-    // ── 3. Q2: 강도 슬라이더 ──
     {
       type: "experience",
       id: "q2",
@@ -74,18 +72,14 @@ window.WORKSHOP = {
         sub: "Q2",
         title: "그 감정의 크기는?",
         slider: {
-          min: 1,
-          max: 5,
-          default: 3,
-          labelMin: "약함",
-          labelMax: "강함",
+          min: 1, max: 5, default: 3,
+          labelMin: "약함", labelMax: "강함",
           ariaLabel: "감정 강도"
         }
       }],
       nextId: "q3"
     },
 
-    // ── 4. Q3: 색상 (v3: 3→4) ──
     {
       type: "experience",
       id: "q3",
@@ -120,7 +114,6 @@ window.WORKSHOP = {
       nextId: "q4"
     },
 
-    // ── 5. Q4: 시간성 (v3 신설) ──
     {
       type: "experience",
       id: "q4",
@@ -148,7 +141,6 @@ window.WORKSHOP = {
       nextId: null
     },
 
-    // ── 6. 결과 ──
     { type: "result", id: "result" }
   ],
 
@@ -162,8 +154,8 @@ window.WORKSHOP = {
         expression: "◕",
         message: "오늘 마음 날씨 좋은 날!\n이 기분 저장해둬.",
         speeches: [
-          { expression: "◕", text: "좋은 하루! 이 기분을 기억해둬 ☀" },
-          { expression: "◡", text: "좋은 기분을 한 줄 메모해두면\n다음에 비슷한 날이 또 와." }
+          { expression: "◕", speech: "좋은 하루! 이 기분을 기억해둬 ☀" },
+          { expression: "◡", speech: "좋은 기분을 한 줄 메모해두면\n다음에 비슷한 날이 또 와." }
         ],
         guide: [
           "이 기분을 한 줄로 메모해두기",
@@ -177,7 +169,7 @@ window.WORKSHOP = {
         expression: "◡",
         message: "잔잔한 하루네.\n이런 날도 괜찮아.",
         speeches: [
-          { expression: "◡", text: "뚜렷한 감정이 없는 것도 자연스러운 거야. 그 자체로 괜찮아." }
+          { expression: "◡", speech: "뚜렷한 감정이 없는 것도 자연스러운 거야. 그 자체로 괜찮아." }
         ],
         guide: [
           "퇴근 후 10분 산책",
@@ -191,8 +183,8 @@ window.WORKSHOP = {
         expression: "♡",
         message: "좀 힘든 날이구나.\n오늘은 나한테 좀 더\n너그러워져봐.",
         speeches: [
-          { expression: "♡", text: "좀 힘든 하루였나 봐.\n여기까지 온 것만으로도 나를 돌보고 있는 거야." },
-          { expression: "◡", text: "더 깊은 이야기를 나누고 싶다면,\n전문 상담사와 대화해보는 것도 좋아.", style: { fontSize: "13px" } }
+          { expression: "♡", speech: "좀 힘든 하루였나 봐.\n여기까지 온 것만으로도 나를 돌보고 있는 거야." },
+          { expression: "◡", speech: "더 깊은 이야기를 나누고 싶다면,\n전문 상담사와 대화해보는 것도 좋아." }
         ],
         guide: [
           "휴대폰 알림 1시간 꺼두기",
@@ -206,8 +198,8 @@ window.WORKSHOP = {
         expression: "✦",
         message: "여러 감정이 섞인 날.\n그것도 솔직한 답이야.",
         speeches: [
-          { expression: "✦", text: "한 가지로 못 정하는 마음, 그게 더 자연스러워." },
-          { expression: "◡", text: "감정은 하나씩 또렷한 게 아니라\n여럿이 동시에 흐르는 거야." }
+          { expression: "✦", speech: "한 가지로 못 정하는 마음, 그게 더 자연스러워." },
+          { expression: "◡", speech: "감정은 하나씩 또렷한 게 아니라\n여럿이 동시에 흐르는 거야." }
         ],
         guide: [
           "지금 떠오르는 감정 단어 3개 적어보기",
@@ -221,7 +213,7 @@ window.WORKSHOP = {
         expression: "◡",
         message: "지금은 잘 모르겠어도\n괜찮아. 그것도 하나의\n솔직한 답이야.",
         speeches: [
-          { expression: "◡", text: "지금 감정을 잘 모르겠는 것도 자연스러운 거야." }
+          { expression: "◡", speech: "지금 감정을 잘 모르겠는 것도 자연스러운 거야." }
         ],
         guide: [
           "잠깐 창밖 보며 멍 때리기",
@@ -243,13 +235,13 @@ window.WORKSHOP = {
 
   next: [
     {
-      url: "../workshop/감정날씨.html",
+      url: "../workshop/emotion-weather.html",
       title: "오늘의 감정 날씨 체크",
       icon: "wb_sunny", iconFilled: true, iconColor: "#4A90D9",
       meta: "감정 관리 · 5분", badge: "혼합형", badgeType: "mixed"
     },
     {
-      url: "../mini/에너지잔량.html",
+      url: "../mini/energy-level.html",
       title: "나의 에너지 잔량은?",
       icon: "cloud", iconFilled: true, iconColor: "#9C27B0",
       meta: "스트레스 · 1분", badge: "선택형", badgeType: "select"
@@ -258,6 +250,6 @@ window.WORKSHOP = {
 
   share: {
     text: "오늘의 마음 날씨를 체크해봤어!",
-    url: "https://maum-workshop.github.io/mini/감정체크.html"
+    url: "https://maum-workshop.github.io/mini/emotion-check.html"
   }
 };

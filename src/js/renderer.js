@@ -147,23 +147,21 @@
     var card = h('div', { className: cardClass });
 
     card.appendChild(h('span', { className: 'result-card__decoration', textContent: '— · —' }));
-    card.appendChild(h('span', { className: 'result-card__title', textContent: data.title || data.cardTitle || '' }));
+    card.appendChild(h('span', { className: 'result-card__title', textContent: data.title || '' }));
 
     var main = h('div', { className: 'result-card__main' });
     if (data.number) main.appendChild(h('span', { className: 'result-card__number', textContent: data.number }));
 
-    // emoji 또는 svg 필드 처리
-    var emojiSrc = data.emoji || data.svg;
-    var emojiType = data.emojiType || (data.svg && !data.emoji ? 'svg' : null);
-    if (emojiSrc) {
+    // emoji + emojiType ('svg' | 'material' | 'text')
+    if (data.emoji) {
       var emojiSpan = h('span', { className: 'result-card__emoji' });
-      if (emojiType === 'svg' || emojiSrc.indexOf('<svg') > -1) {
-        emojiSpan.innerHTML = emojiSrc;
+      if (data.emojiType === 'svg') {
+        emojiSpan.innerHTML = data.emoji;
         emojiSpan.setAttribute('style', 'font-size:48px;line-height:0;');
-      } else if (emojiType === 'material') {
-        emojiSpan.appendChild(renderMaterialIcon(emojiSrc, true, 'font-size:48px;color:' + (data.emojiColor || 'var(--color)') + ';'));
+      } else if (data.emojiType === 'material') {
+        emojiSpan.appendChild(renderMaterialIcon(data.emoji, true, 'font-size:48px;color:' + (data.emojiColor || 'var(--color)') + ';'));
       } else {
-        emojiSpan.textContent = emojiSrc;
+        emojiSpan.textContent = data.emoji;
         emojiSpan.setAttribute('style', 'font-size:48px;');
       }
       main.appendChild(emojiSpan);
@@ -178,19 +176,12 @@
     padDiv.appendChild(card);
     outer.appendChild(padDiv);
 
-    // 카드 뒤 캐릭터 대사 — face/expression, text/speech 양쪽 지원
+    // 카드 뒤 캐릭터 대사
     if (data.speeches) {
       data.speeches.forEach(function (s) {
-        var face = s.face || s.expression || '◡';
-        var text = s.text || s.speech || '';
         var styleStr = 'margin-top:' + (s.marginTop || '20px') + ';';
-        if (typeof s.style === 'string') styleStr += s.style;
-        var g = renderCharacterGuide(face, text, styleStr);
-        if (s.fontSize) g.querySelector('.speech-bubble').style.fontSize = s.fontSize;
-        if (s.style && typeof s.style === 'object' && s.style.fontSize) {
-          g.querySelector('.speech-bubble').style.fontSize = s.style.fontSize;
-        }
-        outer.appendChild(g);
+        if (s.fontSize) styleStr += 'font-size:' + s.fontSize + ';';
+        outer.appendChild(renderCharacterGuide(s.expression, s.speech, styleStr));
       });
     }
 
@@ -201,7 +192,7 @@
 
   function renderTextarea(cfg) {
     var frag = document.createDocumentFragment();
-    if (cfg.guide) frag.appendChild(renderCharacterGuide(cfg.guide.face, cfg.guide.text));
+    if (cfg.guide) frag.appendChild(renderCharacterGuide(cfg.guide.expression, cfg.guide.speech));
     var group = h('div', { className: 'textarea-group' });
     group.appendChild(h('textarea', {
       className: 'textarea-group__input',
@@ -218,7 +209,7 @@
 
   function renderTabSection(cfg) {
     var wrapper = h('div', { style: { marginTop: '32px' } });
-    if (cfg.guide) wrapper.appendChild(renderCharacterGuide(cfg.guide.face, cfg.guide.text));
+    if (cfg.guide) wrapper.appendChild(renderCharacterGuide(cfg.guide.expression, cfg.guide.speech));
 
     var tab = h('div', { className: 'tab' });
     var header = h('div', { className: 'tab__header' });
@@ -245,7 +236,7 @@
 
     // 직접 쓰기 패널
     var writePanel = h('div', { className: 'tab-write' });
-    if (cfg.writeTab.guide) writePanel.appendChild(renderCharacterGuide(cfg.writeTab.guide.face, cfg.writeTab.guide.text));
+    if (cfg.writeTab.guide) writePanel.appendChild(renderCharacterGuide(cfg.writeTab.guide.expression, cfg.writeTab.guide.speech));
     writePanel.appendChild(renderTextarea({
       placeholder: cfg.writeTab.placeholder,
       rows: cfg.writeTab.rows,
@@ -256,19 +247,17 @@
 
     // 골라 쓰기 패널
     var selectPanel = h('div', { className: 'tab-select' });
-    if (cfg.selectTab.guide) selectPanel.appendChild(renderCharacterGuide(cfg.selectTab.guide.face, cfg.selectTab.guide.text));
+    if (cfg.selectTab.guide) selectPanel.appendChild(renderCharacterGuide(cfg.selectTab.guide.expression, cfg.selectTab.guide.speech));
 
     var optList = h('div', { className: 'option-list' });
     cfg.selectTab.options.forEach(function (opt) {
       optList.appendChild(renderRadioOption(opt, cfg.selectTab.name));
     });
 
-    // 골라 쓰기 반응 — face/expression, text/speech 양쪽 지원
+    // 골라 쓰기 반응
     if (cfg.selectTab.reaction) {
       var r = cfg.selectTab.reaction;
-      var rFace = r.face || r.expression || '◡';
-      var rText = r.text || r.speech || '';
-      optList.appendChild(renderReaction(r.id, rFace, rText));
+      optList.appendChild(renderReaction(r.id, r.expression, r.speech));
       // :checked CSS 규칙
       var rules = cfg.selectTab.options.map(function (o) {
         return '#' + o.id + ':checked ~ #' + r.id + ' { display:block; }';
@@ -393,7 +382,7 @@
 
       // 질문 유형별 렌더링
       if (q.type === 'slider') {
-        if (q.guide) sec.appendChild(renderCharacterGuide(q.guide.face, q.guide.text));
+        if (q.guide) sec.appendChild(renderCharacterGuide(q.guide.expression, q.guide.speech));
         sec.appendChild(renderSlider(q.slider));
         return;
       }
@@ -413,68 +402,26 @@
         }
       });
 
-      // 반응 (형제로 삽입) — 세 가지 데이터 패턴 정규화 후 렌더
-      //   1) q.reactions = [{ triggerId, reactionId, face, text }, ...]
-      //   2) q.reactions = { triggerId: { id?, expression|face, speech|text }, ... }
-      //   3) options[].reaction = { id?, expression|face, speech|text }  (옵션 인라인)
-      var reactionList = [];
-
-      (q.options || []).forEach(function (opt) {
-        if (opt.reaction) {
-          reactionList.push({
-            triggerId: opt.id,
-            reactionId: opt.reaction.id || ('r-' + opt.id),
-            face: opt.reaction.face || opt.reaction.expression || '◡',
-            text: opt.reaction.text || opt.reaction.speech || ''
-          });
-        }
-      });
-
-      if (Array.isArray(q.reactions)) {
-        q.reactions.forEach(function (r) {
-          reactionList.push({
-            triggerId: r.triggerId,
-            reactionId: r.reactionId,
-            face: r.face,
-            text: r.text
-          });
-        });
-      } else if (q.reactions && typeof q.reactions === 'object') {
+      // 반응 (형제로 삽입) — 표준: q.reactions = { triggerId: { id?, expression, speech } }
+      if (q.reactions) {
         Object.keys(q.reactions).forEach(function (triggerId) {
           var r = q.reactions[triggerId];
-          reactionList.push({
-            triggerId: triggerId,
-            reactionId: r.id || ('r-' + triggerId),
-            face: r.face || r.expression || '◡',
-            text: r.text || r.speech || ''
-          });
+          var reactionId = r.id || ('r-' + triggerId);
+          container.appendChild(renderReaction(reactionId, r.expression, r.speech));
+          cssRules.push('#' + triggerId + ':checked ~ #' + reactionId + ' { display:block; }');
         });
       }
 
-      reactionList.forEach(function (r) {
-        container.appendChild(renderReaction(r.reactionId, r.face, r.text));
-        cssRules.push('#' + r.triggerId + ':checked ~ #' + r.reactionId + ' { display:block; }');
-      });
-
       // 결과 블록 (형제로 삽입) — items[] / 직접 / card 하위 모두 지원
-      if (q.resultMap) {
+      // 결과 블록 — 표준: ws.results.items[resId]
+      if (q.resultMap && ws.results && ws.results.items) {
         Object.keys(q.resultMap).forEach(function (optId) {
           var resId = q.resultMap[optId];
-          var resData = null;
-          if (ws.results) {
-            if (ws.results.items && ws.results.items[resId]) {
-              resData = ws.results.items[resId];
-            } else if (ws.results[resId]) {
-              resData = ws.results[resId].card || ws.results[resId];
-            }
-          }
+          var resData = ws.results.items[resId];
           if (resData) {
-            // cardTitle을 데이터에 주입 (개별 title 없을 때 fallback)
             var blockData = {};
             Object.keys(resData).forEach(function (k) { blockData[k] = resData[k]; });
-            if (!blockData.title) {
-              blockData.title = resData.cardTitle || (ws.results && ws.results.cardTitle) || '';
-            }
+            if (!blockData.title) blockData.title = ws.results.cardTitle || '';
             container.appendChild(renderResultBlock(resId, blockData, ws.category));
           }
           cssRules.push('#' + optId + ':checked ~ #' + resId + ' { display:block; }');

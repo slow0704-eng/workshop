@@ -1,7 +1,9 @@
 /* ================================================
    마음 워크숍 — 데이터 시트
    나의 강점 발견 (category: esteem)
-   v3: 3영역 9개 → VIA 6영역 18개 (지혜·용기·인간애·정의·절제·초월)
+   ================================================
+   표준 스키마: energy-level.js 헤더 참조
+   결과 type: 'checkbox-dynamic' (result.js가 체크된 항목 기반 동적 카드 생성)
    ================================================ */
 
 window.WORKSHOP = {
@@ -12,7 +14,6 @@ window.WORKSHOP = {
   type: "full",
 
   steps: [
-    // ── 1. 도입 ──
     {
       type: "intro",
       id: "intro",
@@ -25,7 +26,6 @@ window.WORKSHOP = {
       nextLabel: "같이 해보자! →"
     },
 
-    // ── 2. 탐색 (VIA 6영역) ──
     {
       type: "explore",
       id: "explore",
@@ -42,7 +42,6 @@ window.WORKSHOP = {
       nextId: "exp-wisdom"
     },
 
-    // ── 3. 지혜 ──
     {
       type: "experience",
       id: "exp-wisdom",
@@ -63,7 +62,6 @@ window.WORKSHOP = {
       nextId: "exp-courage"
     },
 
-    // ── 4. 용기 ──
     {
       type: "experience",
       id: "exp-courage",
@@ -84,7 +82,6 @@ window.WORKSHOP = {
       nextId: "exp-love"
     },
 
-    // ── 5. 인간애 ──
     {
       type: "experience",
       id: "exp-love",
@@ -105,7 +102,6 @@ window.WORKSHOP = {
       nextId: "exp-justice"
     },
 
-    // ── 6. 정의 ──
     {
       type: "experience",
       id: "exp-justice",
@@ -126,7 +122,6 @@ window.WORKSHOP = {
       nextId: "exp-temperance"
     },
 
-    // ── 7. 절제 ──
     {
       type: "experience",
       id: "exp-temperance",
@@ -147,7 +142,6 @@ window.WORKSHOP = {
       nextId: "exp-transcendence"
     },
 
-    // ── 8. 초월 ──
     {
       type: "experience",
       id: "exp-transcendence",
@@ -168,7 +162,6 @@ window.WORKSHOP = {
       nextId: null
     },
 
-    // ── 9. 결과 ──
     { type: "result", id: "result" }
   ],
 
@@ -197,13 +190,13 @@ window.WORKSHOP = {
 
   next: [
     {
-      url: "../workshop/5년후엽서.html",
+      url: "../workshop/postcard-5yr.html",
       title: "5년 후 나에게 보내는 엽서",
       icon: "mail", iconColor: "#FF7043",
       meta: "진로·목표 · 5분", badge: "골라쓰기", badgeType: "pick"
     },
     {
-      url: "../workshop/감정날씨.html",
+      url: "../workshop/emotion-weather.html",
       title: "오늘의 감정 날씨 체크",
       icon: "wb_sunny", iconColor: "#4A90D9",
       meta: "감정 관리 · 5분", badge: "혼합형", badgeType: "mixed"
@@ -212,6 +205,6 @@ window.WORKSHOP = {
 
   share: {
     text: "나의 숨겨진 강점을 발견했어!",
-    url: "https://maum-workshop.github.io/workshop/강점발견.html"
+    url: "https://maum-workshop.github.io/workshop/strength.html"
   }
 };

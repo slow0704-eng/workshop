@@ -1,8 +1,8 @@
 /* ================================================
    마음 워크숍 — 데이터 시트
    5년 후 나에게 보내는 엽서 (category: career)
-   v3: 가치 카드 4→5 (기여·의미 추가), Q2 단어 신설,
-       Q3 골라쓰기 5→7, Q4 응원 메시지 탭 신설
+   ================================================
+   표준 스키마: energy-level.js 헤더 참조
    ================================================ */
 
 window.WORKSHOP = {
@@ -13,7 +13,6 @@ window.WORKSHOP = {
   type: "full",
 
   steps: [
-    // ── 1. 도입 ──
     {
       type: "intro",
       id: "intro",
@@ -26,7 +25,6 @@ window.WORKSHOP = {
       nextLabel: "같이 해보자! →"
     },
 
-    // ── 2. 탐색 ──
     {
       type: "explore",
       id: "explore",
@@ -41,7 +39,6 @@ window.WORKSHOP = {
       nextId: "experience"
     },
 
-    // ── 3. 체험 (Q1 가치 + Q2 단어) ──
     {
       type: "experience",
       id: "experience",
@@ -49,7 +46,6 @@ window.WORKSHOP = {
       expression: "◡",
       speech: "5년 후에 가장 중요하게 여기고 싶은 걸 골라봐.",
       questions: [
-        // Q1: 카드 선택 (가치관)
         {
           id: "value",
           type: "card-grid",
@@ -85,7 +81,6 @@ window.WORKSHOP = {
       nextId: "word"
     },
 
-    // ── 4. Q2: 5년 후 한 단어 (v3 신설) ──
     {
       type: "experience",
       id: "word",
@@ -123,7 +118,6 @@ window.WORKSHOP = {
       nextId: "message"
     },
 
-    // ── 5. Q3: 5년 후 나에게 메시지 (탭) ──
     {
       type: "experience",
       id: "message",
@@ -131,18 +125,18 @@ window.WORKSHOP = {
       expression: "◡",
       speech: "5년 후 나에게 하고 싶은 말이 있어?",
       tab: {
-        guide: { expression: "◡", text: "직접 적어도 좋고, 마음에 드는 걸 골라도 좋아." },
+        guide: { expression: "◡", speech: "직접 적어도 좋고, 마음에 드는 걸 골라도 좋아." },
         defaultTab: "select",
 
         writeTab: {
-          guide: { expression: "◠", text: "자유롭게 적어봐. 한 글자도 괜찮아.\n여기 적은 건 아무도 안 봐." },
+          guide: { expression: "◠", speech: "자유롭게 적어봐. 한 글자도 괜찮아.\n여기 적은 건 아무도 안 봐." },
           placeholder: "5년 후의 나에게...",
           rows: 4,
           note: "답은 저장되지 않아요."
         },
 
         selectTab: {
-          guide: { expression: "◡", text: "마음에 드는 걸 골라봐." },
+          guide: { expression: "◡", speech: "마음에 드는 걸 골라봐." },
           name: "pick",
           options: [
             { id: "pick-a", text: "“지금 고생하고 있지만, 다 잘 될 거야.”" },
@@ -153,7 +147,7 @@ window.WORKSHOP = {
             { id: "pick-f", text: "“넘어져도 다시 일어났던 거 기억해.”" },
             { id: "pick-g", text: "“지금 못 가진 것보다 가진 걸 봐.”" }
           ],
-          reaction: { id: "rp", expression: "◕", text: "좋은 말이다. 5년 후의 너도 분명 고마워할 거야." },
+          reaction: { id: "rp", expression: "◕", speech: "좋은 말이다. 5년 후의 너도 분명 고마워할 거야." },
           extraCaption: "추가로 적고 싶은 게 있으면 아래에 적어봐도 좋아. (선택)",
           extraTextarea: { placeholder: "더 하고 싶은 말... (선택)", rows: 2 }
         }
@@ -161,7 +155,6 @@ window.WORKSHOP = {
       nextId: "cheer"
     },
 
-    // ── 6. Q4: 지금의 나에게 응원 (탭, v3 신설) ──
     {
       type: "experience",
       id: "cheer",
@@ -169,18 +162,18 @@ window.WORKSHOP = {
       expression: "◠",
       speech: "5년 후의 너가 지금의 너에게 보내는 응원이라면?",
       tab: {
-        guide: { expression: "◡", text: "직접 적어도 좋고, 마음에 드는 걸 골라도 좋아." },
+        guide: { expression: "◡", speech: "직접 적어도 좋고, 마음에 드는 걸 골라도 좋아." },
         defaultTab: "select",
 
         writeTab: {
-          guide: { expression: "◠", text: "자유롭게 적어봐. 짧아도 괜찮아." },
+          guide: { expression: "◠", speech: "자유롭게 적어봐. 짧아도 괜찮아." },
           placeholder: "지금의 나에게...",
           rows: 3,
           note: "답은 저장되지 않아요."
         },
 
         selectTab: {
-          guide: { expression: "◡", text: "마음에 드는 걸 골라봐." },
+          guide: { expression: "◡", speech: "마음에 드는 걸 골라봐." },
           name: "cheer-pick",
           options: [
             { id: "ch-a", text: "“여기까지 온 것만으로도 충분해.”" },
@@ -189,14 +182,13 @@ window.WORKSHOP = {
             { id: "ch-d", text: "“조급해하지 마, 너만의 속도가 있어.”" },
             { id: "ch-e", text: "“혹시 모를 좋은 일이 기다리고 있을지도.”" }
           ],
-          reaction: { id: "rc", expression: "◕", text: "5년 후의 너가 보낸 말이라고 생각해봐." }
+          reaction: { id: "rc", expression: "◕", speech: "5년 후의 너가 보낸 말이라고 생각해봐." }
         }
       },
       nextId: null,
       nextLabel: "결과 보기 →"
     },
 
-    // ── 7. 결과 ──
     { type: "result", id: "result" }
   ],
 
@@ -211,8 +203,8 @@ window.WORKSHOP = {
         expression: "◕",
         message: "성장을 향해 달려가는 너,<br>지금 이 순간의 고민도<br>그 여정의 일부야.",
         speeches: [
-          { expression: "◕", text: "미래의 너한테 엽서를 보냈어. 지금 고민하는 것도 전부 의미 있어." },
-          { expression: "◡", text: "성장은 직선이 아니야. 굽이굽이가 다 길이야." }
+          { expression: "◕", speech: "미래의 너한테 엽서를 보냈어. 지금 고민하는 것도 전부 의미 있어." },
+          { expression: "◡", speech: "성장은 직선이 아니야. 굽이굽이가 다 길이야." }
         ],
         guide: [
           "오늘 새로 배운 것 하나 메모하기",
@@ -227,8 +219,8 @@ window.WORKSHOP = {
         expression: "◡",
         message: "편안한 일상을 꿈꾸는 너,<br>지금 불안해도<br>다 괜찮아질 거야.",
         speeches: [
-          { expression: "◡", text: "안정을 원하는 마음, 당연한 거야. 조급해하지 않아도 돼." },
-          { expression: "◡", text: "오늘도 무사히 보낸 게 이미 그 안정의 한 부분이야." }
+          { expression: "◡", speech: "안정을 원하는 마음, 당연한 거야. 조급해하지 않아도 돼." },
+          { expression: "◡", speech: "오늘도 무사히 보낸 게 이미 그 안정의 한 부분이야." }
         ],
         guide: [
           "오늘 하루 무사한 것에 감사",
@@ -243,8 +235,8 @@ window.WORKSHOP = {
         expression: "◕",
         message: "소중한 사람들과 함께하는 너,<br>지금의 관계도<br>충분히 소중해.",
         speeches: [
-          { expression: "◕", text: "사람을 소중히 여기는 마음, 정말 좋은 강점이야." },
-          { expression: "◡", text: "관계는 노력 + 운이야. 너는 노력 충분히 하고 있어." }
+          { expression: "◕", speech: "사람을 소중히 여기는 마음, 정말 좋은 강점이야." },
+          { expression: "◡", speech: "관계는 노력 + 운이야. 너는 노력 충분히 하고 있어." }
         ],
         guide: [
           "오랜만에 연락하고 싶은 사람 1명 떠올리기",
@@ -259,8 +251,8 @@ window.WORKSHOP = {
         expression: "◡",
         message: "자유롭게 살고 싶은 너,<br>지금의 선택 하나하나가<br>그 자유를 만들고 있어.",
         speeches: [
-          { expression: "◡", text: "어떤 선택을 하든, 그게 너의 정답이야." },
-          { expression: "◡", text: "자유는 큰 결심이 아니라\n매일 작은 \"안 해도 돼\"의 합이야." }
+          { expression: "◡", speech: "어떤 선택을 하든, 그게 너의 정답이야." },
+          { expression: "◡", speech: "자유는 큰 결심이 아니라\n매일 작은 \"안 해도 돼\"의 합이야." }
         ],
         guide: [
           "오늘 \"안 해도 되는 일\" 1개 찾기",
@@ -275,8 +267,8 @@ window.WORKSHOP = {
         expression: "✦",
         message: "의미를 찾고 싶은 너,<br>그 질문 자체가<br>이미 답의 시작이야.",
         speeches: [
-          { expression: "✦", text: "의미는 발견하는 게 아니라 만드는 거야." },
-          { expression: "◡", text: "오늘 의미 있었던 30초가 있다면\n그게 시작이야." }
+          { expression: "✦", speech: "의미는 발견하는 게 아니라 만드는 거야." },
+          { expression: "◡", speech: "오늘 의미 있었던 30초가 있다면\n그게 시작이야." }
         ],
         guide: [
           "오늘 의미 있었던 순간 1개 떠올리기",
@@ -291,8 +283,8 @@ window.WORKSHOP = {
         expression: "◡",
         message: "아직 모르겠어도 괜찮아.<br>지금 이 순간 고민하는 것<br>자체가 의미 있어.",
         speeches: [
-          { expression: "◡", text: "아직 모르겠는 것도 자연스러운 거야. 천천히 찾아가면 돼." },
-          { expression: "◡", text: "정답을 알고 시작하는 사람은 없어." }
+          { expression: "◡", speech: "아직 모르겠는 것도 자연스러운 거야. 천천히 찾아가면 돼." },
+          { expression: "◡", speech: "정답을 알고 시작하는 사람은 없어." }
         ],
         guide: [
           "오늘 끌리는 단어 1개 적기",
@@ -314,13 +306,13 @@ window.WORKSHOP = {
 
   next: [
     {
-      url: "../workshop/강점발견.html",
+      url: "../workshop/strength.html",
       title: "나의 강점 발견",
       icon: "fitness_center", iconColor: "#F5A623",
       meta: "자존감 · 5분", badge: "선택형", badgeType: "select"
     },
     {
-      url: "../workshop/감정날씨.html",
+      url: "../workshop/emotion-weather.html",
       title: "오늘의 감정 날씨 체크",
       icon: "wb_sunny", iconColor: "#4A90D9",
       meta: "감정 관리 · 5분", badge: "혼합형", badgeType: "mixed"
@@ -329,6 +321,6 @@ window.WORKSHOP = {
 
   share: {
     text: "5년 후의 나에게 엽서를 보냈어!",
-    url: "https://maum-workshop.github.io/workshop/5년후엽서.html"
+    url: "https://maum-workshop.github.io/workshop/postcard-5yr.html"
   }
 };

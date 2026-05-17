@@ -1,7 +1,12 @@
 /* ================================================
    마음 워크숍 — 데이터 시트
    나의 에너지 잔량은? (category: stress / mini)
-   v3: 4문항 → 6문항, 결과 4종 → 5종, 모든 옵션 reaction 커버
+   ================================================
+   표준 스키마:
+   - 캐릭터: { expression, speech }
+   - 반응:   q.reactions = { triggerId: { id?, expression, speech } }
+   - 이모지: emoji + emojiType: 'svg'|'material'|'text'
+   - 결과:   results.items[resId], results.cardTitle
    ================================================ */
 
 window.WORKSHOP = {
@@ -12,7 +17,6 @@ window.WORKSHOP = {
   type: "mini",
 
   steps: [
-    // ── 1. 도입 ──
     {
       type: "intro",
       id: "start",
@@ -25,7 +29,6 @@ window.WORKSHOP = {
       nextLabel: "같이 해보자! →"
     },
 
-    // ── 2. Q1: 아침 기분 ──
     {
       type: "question",
       id: "q1",
@@ -46,11 +49,9 @@ window.WORKSHOP = {
         "q1-c":   { expression: "♡", speech: "좀 피곤한 아침이었나 봐." },
         "q1-idk": { expression: "◡", speech: "모르겠는 것도 자연스러운 거야." }
       },
-      nextId: "q2",
-      nextLabel: "다음 →"
+      nextId: "q2"
     },
 
-    // ── 3. Q2: 수면 (v3 신설) ──
     {
       type: "question",
       id: "q2",
@@ -71,11 +72,9 @@ window.WORKSHOP = {
         "q2-d":   { expression: "♡", speech: "잠이 짧으면 오늘은 좀 살살 가도 돼." },
         "q2-idk": { expression: "◡", speech: "기억이 흐릿한 것도 자연스러워." }
       },
-      nextId: "q3",
-      nextLabel: "다음 →"
+      nextId: "q3"
     },
 
-    // ── 4. Q3: 욕구 ──
     {
       type: "question",
       id: "q3",
@@ -96,11 +95,9 @@ window.WORKSHOP = {
         "q3-d":   { expression: "◡", speech: "사람이 그리운 날인가 봐." },
         "q3-idk": { expression: "◡", speech: "특별히 끌리는 게 없어도 돼." }
       },
-      nextId: "q4",
-      nextLabel: "다음 →"
+      nextId: "q4"
     },
 
-    // ── 5. Q4: 주간 감정 ──
     {
       type: "question",
       id: "q4",
@@ -119,11 +116,9 @@ window.WORKSHOP = {
         "q4-c":   { expression: "♡", speech: "많이 지친 한 주였구나." },
         "q4-idk": { expression: "◡", speech: "한 주를 돌아보는 게 어렵기도 해." }
       },
-      nextId: "q5",
-      nextLabel: "다음 →"
+      nextId: "q5"
     },
 
-    // ── 6. Q5: 집중력 (v3 신설) ──
     {
       type: "question",
       id: "q5",
@@ -142,11 +137,9 @@ window.WORKSHOP = {
         "q5-c":   { expression: "♡", speech: "에너지가 흩어지는 시기일 수 있어." },
         "q5-idk": { expression: "◡", speech: "딱 잘라 말하기 어렵지." }
       },
-      nextId: "q6",
-      nextLabel: "다음 →"
+      nextId: "q6"
     },
 
-    // ── 7. Q6: 결과 분기 ──
     {
       type: "question",
       id: "q6",
@@ -154,10 +147,10 @@ window.WORKSHOP = {
       sub: "Q6",
       title: "좋아하는 취미를 할 에너지가 있어?",
       options: [
-        { id: "q6-a", text: "충분하다", value: "high" },
-        { id: "q6-b", text: "좀 쉬면 할 수 있다", value: "mid" },
-        { id: "q6-c", text: "전혀 없다", value: "low" },
-        { id: "q6-idk", text: "잘 모르겠어", value: "idk" }
+        { id: "q6-a", text: "충분하다" },
+        { id: "q6-b", text: "좀 쉬면 할 수 있다" },
+        { id: "q6-c", text: "전혀 없다" },
+        { id: "q6-idk", text: "잘 모르겠어" }
       ],
       reactions: {
         "q6-a":   { expression: "◕", speech: "대단해! 에너지가 살아있네." },
@@ -175,7 +168,6 @@ window.WORKSHOP = {
       nextLabel: "결과 보기 →"
     },
 
-    // ── 8. 결과 ──
     { type: "result", id: "result" }
   ],
 
@@ -191,8 +183,8 @@ window.WORKSHOP = {
         expression: "◕",
         message: "오늘 에너지가 넘치는 날!\n이 기분을 기억해둬.",
         speeches: [
-          { expression: "◕", text: "에너지 넘치는 하루야!\n이 기분 소중한 사람한테 나눠보는 건 어때?" },
-          { expression: "◡", text: "잘 풀린 날을 한 줄 메모로 남겨두면\n다음에 똑같이 풀릴 확률이 올라가." }
+          { expression: "◕", speech: "에너지 넘치는 하루야!\n이 기분 소중한 사람한테 나눠보는 건 어때?" },
+          { expression: "◡", speech: "잘 풀린 날을 한 줄 메모로 남겨두면\n다음에 똑같이 풀릴 확률이 올라가." }
         ],
         guide: [
           "오늘 잘 풀린 일 한 줄 메모하기",
@@ -208,8 +200,8 @@ window.WORKSHOP = {
         expression: "◡",
         message: "적당히 충전된 상태야.\n오늘은 페이스를 유지해봐.",
         speeches: [
-          { expression: "◡", text: "무리하지 않아도 돼. 지금 페이스면 충분해." },
-          { expression: "◡", text: "한 박자 쉬어가는 것도\n에너지 관리의 일부야." }
+          { expression: "◡", speech: "무리하지 않아도 돼. 지금 페이스면 충분해." },
+          { expression: "◡", speech: "한 박자 쉬어가는 것도\n에너지 관리의 일부야." }
         ],
         guide: [
           "좋아하는 음료 한 잔 천천히 마시기",
@@ -225,18 +217,14 @@ window.WORKSHOP = {
         expression: "♡",
         message: "작은 쉼 하나가\n내일의 에너지가 됩니다.",
         speeches: [
-          { expression: "♡", text: "좀 지친 하루였나 봐.\n여기까지 온 것만으로도 나를 돌보고 있는 거야.\n당신 잘못이 아니야." },
-          { expression: "◡", text: "더 깊은 이야기를 나누고 싶다면,\n전문 상담사와 대화해보는 것도 좋아." }
+          { expression: "♡", speech: "좀 지친 하루였나 봐.\n여기까지 온 것만으로도 나를 돌보고 있는 거야.\n당신 잘못이 아니야." },
+          { expression: "◡", speech: "더 깊은 이야기를 나누고 싶다면,\n전문 상담사와 대화해보는 것도 좋아." }
         ],
         guide: [
           "조명 낮추고 10분 가만히 있기",
           "좋아했던 음식 떠올려보기",
           "오늘은 일찍 자기"
-        ],
-        extraSpeech: {
-          expression: "◡",
-          text: "더 깊은 이야기를 나누고 싶다면,\n전문 상담사와 대화해보는 것도 좋아."
-        }
+        ]
       },
 
       "result-idk": {
@@ -246,7 +234,7 @@ window.WORKSHOP = {
         expression: "◡",
         message: "지금은 잘 모르겠어도\n괜찮아. 여기까지 온 것\n만으로도 충분해.",
         speeches: [
-          { expression: "◡", text: "지금 내 상태를 잘 모르겠는 것도 자연스러운 거야.\n그것도 하나의 솔직한 답이야." }
+          { expression: "◡", speech: "지금 내 상태를 잘 모르겠는 것도 자연스러운 거야.\n그것도 하나의 솔직한 답이야." }
         ],
         guide: [
           "오늘 잠깐만 휴대폰 알림 꺼두기",
@@ -268,13 +256,13 @@ window.WORKSHOP = {
 
   next: [
     {
-      url: "../workshop/감정날씨.html",
+      url: "../workshop/emotion-weather.html",
       title: "오늘의 감정 날씨 체크",
       icon: "wb_sunny", iconColor: "#4A90D9",
       meta: "감정 관리 · 5분", badge: "혼합형", badgeType: "mixed"
     },
     {
-      url: "../mini/감정체크.html",
+      url: "../mini/emotion-check.html",
       title: "30초 감정 체크",
       icon: "favorite", iconColor: "#4A90D9",
       meta: "감정 관리 · 1분", badge: "선택형", badgeType: "select"
@@ -283,6 +271,6 @@ window.WORKSHOP = {
 
   share: {
     text: "나의 에너지 잔량을 체크해봤어! 나도 해보기:",
-    url: "https://maum-workshop.github.io/mini/에너지잔량.html"
+    url: "https://maum-workshop.github.io/mini/energy-level.html"
   }
 };
