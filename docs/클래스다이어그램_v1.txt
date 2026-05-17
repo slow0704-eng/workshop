@@ -1,0 +1,776 @@
+================================================================
+        "마음 워크숍" 클래스 다이어그램
+        v1.0
+================================================================
+
+작성일: 2026년 3월 14일
+기준 문서: 어플리케이션아키텍처 v1.0 / 인터페이스명세서 v1.0
+          데이터아키텍처 v1.0 / 콘텐츠매트릭스 v2.0
+
+문서 목적:
+  HTML+CSS only 정적 아키텍처에서의 "클래스"를 정의.
+  전통적 OOP 클래스가 아닌, CSS 클래스·HTML 구조·파일 단위를
+  객체 모델로 표현하여 시스템 구조를 시각화.
+
+범례:
+  [C] CSS 클래스 (스타일·상태 관리)
+  [H] HTML 구조 (문서·섹션·요소)
+  [F] 파일 단위 (HTML 파일 = 콘텐츠 인스턴스)
+  [A] 에셋 (SVG·이미지)
+
+
+════════════════════════════════════════════════════════════════
+I. 시스템 전체 클래스 구조
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+1. 최상위 클래스 다이어그램
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────────────────────┐
+  │                        Site                              │
+  │                    (maum-workshop/)                       │
+  │                                                          │
+  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────┐  │
+  │  │  Pages   │  │  Styles  │  │  Assets  │  │ Config │  │
+  │  │          │  │          │  │          │  │        │  │
+  │  │ · Main   │  │ · style  │  │ · Char   │  │ · CNAME│  │
+  │  │ · Mini   │  │ · work   │  │ · OG     │  │ · .no  │  │
+  │  │ · Full   │  │ · result │  │          │  │   jekyll│  │
+  │  │ · Chall  │  │ · char   │  │          │  │        │  │
+  │  │ · Event  │  │          │  │          │  │        │  │
+  │  │ · About  │  │          │  │          │  │        │  │
+  │  └──────────┘  └──────────┘  └──────────┘  └────────┘  │
+  └──────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────
+2. Pages 계층 구조
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────────────┐
+  │                   Page [H]                       │
+  │ ─────────────────────────────────────────────── │
+  │ 속성:                                            │
+  │   title: string                                  │
+  │   lang: "ko"                                     │
+  │   category: CategoryTheme                        │
+  │   ogMeta: OGMeta                                 │
+  │ ─────────────────────────────────────────────── │
+  │ 구성:                                            │
+  │   header: Header                                 │
+  │   main: MainContent                              │
+  │   footer: CrisisHelp                             │
+  │ ─────────────────────────────────────────────── │
+  │ CSS 링크:                                        │
+  │   style.css                                      │
+  │   workshop.css                                   │
+  │   result-card.css                                │
+  │   character.css                                  │
+  └──────────────────────────────────────────────────┘
+           │
+           ├── MainPage (index.html)
+           ├── AboutPage (about.html)
+           ├── MiniWorkshop (/mini/*.html)
+           ├── FullWorkshop (/workshop/*.html)
+           ├── ChallengeIndex (/challenge/*/index.html)
+           ├── ChallengeDay (/challenge/*/dayN.html)
+           ├── ChallengeComplete (/challenge/*/complete.html)
+           └── EventLanding (/event/*.html)
+
+
+────────────────────────────────────────────────────────────────
+3. 상세 클래스 다이어그램 — 페이지 유형별
+────────────────────────────────────────────────────────────────
+
+  ■ MainPage [H][F]
+
+  ┌──────────────────────────────────────────┐
+  │              MainPage                    │
+  │         extends Page                     │
+  │ ──────────────────────────────────────── │
+  │ 속성:                                    │
+  │   file: "index.html"                     │
+  │ ──────────────────────────────────────── │
+  │ 구성:                                    │
+  │   hero: HeroSection                      │
+  │   miniSection: MiniCardGrid              │
+  │   fullSection: FullWorkshopList           │
+  │   challengeSection: ChallengeList (P3)   │
+  │   categoryFilter: CategoryFilter (P2)    │
+  └──────────────────────────────────────────┘
+
+  ■ MiniWorkshop [H][F]
+
+  ┌──────────────────────────────────────────┐
+  │           MiniWorkshop                   │
+  │         extends Page                     │
+  │ ──────────────────────────────────────── │
+  │ 속성:                                    │
+  │   id: string (M01, M02...)               │
+  │   file: "/mini/{name}.html"              │
+  │   experienceType: "A" (고정)             │
+  │   duration: "1분"                        │
+  │   awTag: string                          │
+  │ ──────────────────────────────────────── │
+  │ 구성:                                    │
+  │   startSection: StartSection             │
+  │   questionSections: QuestionSection[]    │
+  │   resultSection: ResultSection           │
+  │ ──────────────────────────────────────── │
+  │ 관계:                                    │
+  │   → FullWorkshop (전환 추천)             │
+  └──────────────────────────────────────────┘
+
+  ■ FullWorkshop [H][F]
+
+  ┌──────────────────────────────────────────┐
+  │           FullWorkshop                   │
+  │         extends Page                     │
+  │ ──────────────────────────────────────── │
+  │ 속성:                                    │
+  │   id: string (F01, F02...)               │
+  │   file: "/workshop/{name}.html"          │
+  │   experienceType: "A" | "B" | "C"        │
+  │   duration: "3~5분"                      │
+  │   awTag: string                          │
+  │ ──────────────────────────────────────── │
+  │ 구성:                                    │
+  │   introSection: IntroSection             │
+  │   exploreSection: ExploreSection          │
+  │   experienceSection: ExperienceSection    │
+  │   resultSection: ResultSection           │
+  │ ──────────────────────────────────────── │
+  │ 서브타입:                                │
+  │   TypeA: 선택형 (서술 없음)              │
+  │   TypeB: 혼합형 (서술 선택사항)          │
+  │   TypeC: 서술대안형 (탭 전환)            │
+  │ ──────────────────────────────────────── │
+  │ 관계:                                    │
+  │   → FullWorkshop[] (다른 풀 추천 2개)    │
+  │   → ChallengeIndex (챌린지 연결)         │
+  └──────────────────────────────────────────┘
+
+  ■ ChallengeDay [H][F]
+
+  ┌──────────────────────────────────────────┐
+  │           ChallengeDay                   │
+  │         extends FullWorkshop             │
+  │ ──────────────────────────────────────── │
+  │ 속성:                                    │
+  │   challengeId: string (C01~C04)          │
+  │   dayNumber: number (1~12)               │
+  │   totalDays: number (7 | 12)             │
+  │   file: "/challenge/{name}/dayN.html"    │
+  │ ──────────────────────────────────────── │
+  │ 추가 구성:                               │
+  │   dayCompleteSection: DayComplete        │
+  │     - progressVisualization: ●○          │
+  │     - progressBar: ProgressBar           │
+  │     - encourageMessage: CharacterGuide   │
+  │     - bookmarkGuide: text                │
+  │ ──────────────────────────────────────── │
+  │ 관계:                                    │
+  │   → ChallengeIndex (돌아가기)            │
+  │   → ChallengeComplete (마지막 Day 시)    │
+  └──────────────────────────────────────────┘
+
+  ■ EventLanding [H][F]
+
+  ┌──────────────────────────────────────────┐
+  │           EventLanding                   │
+  │         extends Page                     │
+  │ ──────────────────────────────────────── │
+  │ 속성:                                    │
+  │   eventName: string                      │
+  │   partnerLogo: string (이미지 경로)      │
+  │   file: "/event/{name}.html"             │
+  │ ──────────────────────────────────────── │
+  │ 구성:                                    │
+  │   banner: EventBanner                    │
+  │   characterWelcome: CharacterGuide       │
+  │   miniCards: MiniCard[]                  │
+  │   fullLinks: FullWorkshopLink[]          │
+  │   feedbackLink: ExternalLink (구글폼)    │
+  └──────────────────────────────────────────┘
+
+
+════════════════════════════════════════════════════════════════
+II. 섹션 클래스
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+4. 워크숍 섹션 계층 구조
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────┐
+  │              Section [H]                 │
+  │ ──────────────────────────────────────── │
+  │ 속성:                                    │
+  │   id: string (#intro, #explore, ...)     │
+  │   visible: boolean (:target 상태)        │
+  │ ──────────────────────────────────────── │
+  │ CSS 상태:                                │
+  │   기본: display: none                    │
+  │   :target 시: display: block             │
+  │   첫 섹션: display: block (기본)         │
+  │   전환: fadeIn 0.4s                      │
+  └──────────────────────────────────────────┘
+         │
+         ├── StartSection (미니 도입)
+         │     구성: CharacterGuide + ActionButton
+         │
+         ├── IntroSection (풀 도입)
+         │     구성: Emoji + CharacterGuide + ProgressBar + ActionButton
+         │
+         ├── ExploreSection (탐색)
+         │     구성: CharacterGuide + DetailsCard[] + ActionButton
+         │
+         ├── ExperienceSection (체험)
+         │     구성: Form (아래 상세)
+         │
+         ├── ResultSection (결과)
+         │     구성: 결과 분기 영역 (Form 내부)
+         │
+         └── DayCompleteSection (챌린지 Day 완료)
+               구성: CharacterGuide + ProgressDots + ProgressBar
+
+
+────────────────────────────────────────────────────────────────
+5. ExperienceSection 내부 구조 (Form)
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────────────────────┐
+  │              ExperienceForm [H]                          │
+  │              <form> 태그                                 │
+  │ ──────────────────────────────────────────────────────── │
+  │                                                          │
+  │  ┌─ 질문·선택 영역 ────────────────────────────────┐    │
+  │  │                                                  │    │
+  │  │  CharacterGuide (안내 대사)                      │    │
+  │  │  QuestionText                                    │    │
+  │  │  InputGroup (유형에 따라)                        │    │
+  │  │    ├── RadioGroup        (단일 선택)             │    │
+  │  │    ├── CheckboxGroup     (복수 선택)             │    │
+  │  │    ├── LikertScale       (5점 척도)              │    │
+  │  │    ├── CardGrid          (카드 2×2)              │    │
+  │  │    └── SliderGroup       (range)                 │    │
+  │  │  ReactionGroup (선택별 캐릭터 반응)              │    │
+  │  │                                                  │    │
+  │  │  ── 유형 B/C 전용 ──                             │    │
+  │  │  TabSwitch (유형 C: 직접/골라)                   │    │
+  │  │  TextareaGroup (유형 B: 선택사항)                │    │
+  │  │                                                  │    │
+  │  └──────────────────────────────────────────────────┘    │
+  │                                                          │
+  │  ┌─ 결과 영역 (같은 form 내부) ────────────────────┐    │
+  │  │                                                  │    │
+  │  │  ResultVariant[] (선택 조합별 결과)              │    │
+  │  │    ├── ResultCard (정사각형 카드)                │    │
+  │  │    ├── CharacterGuide (검열자 대응 대사)         │    │
+  │  │    ├── ShareActions (공유 버튼)                  │    │
+  │  │    ├── PracticeGuide (실천 가이드)               │    │
+  │  │    └── NextWorkshop (추천 링크)                  │    │
+  │  │                                                  │    │
+  │  └──────────────────────────────────────────────────┘    │
+  │                                                          │
+  │  ActionButton ("결과 보기 →")                            │
+  │                                                          │
+  │  ★ input과 result가 같은 form 안의 형제여야             │
+  │    :checked + ~ 선택자가 작동함                          │
+  │                                                          │
+  └──────────────────────────────────────────────────────────┘
+
+
+════════════════════════════════════════════════════════════════
+III. UI 컴포넌트 클래스
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+6. 글로벌 컴포넌트 클래스
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────┐
+  │   Header [C][H]      │
+  │   .header             │
+  │ ──────────────────── │
+  │ 자식:                 │
+  │   .header__logo       │
+  │   .header__icon       │
+  │   .header__home       │
+  │ ──────────────────── │
+  │ CSS: sticky, 48px    │
+  └──────────────────────┘
+
+  ┌──────────────────────┐
+  │  CrisisHelp [C][H]  │
+  │  .crisis-help         │
+  │ ──────────────────── │
+  │ 자식:                 │
+  │  .crisis-help__message│
+  │  .crisis-help__numbers│
+  │  .crisis-help__info   │
+  │ ──────────────────── │
+  │ 제약: 캐릭터 미포함   │
+  │ 필수: 전 페이지 포함  │
+  └──────────────────────┘
+
+  ┌──────────────────────┐      ┌──────────────────────┐
+  │ ActionButton [C]     │      │ ProgressBar [C][H]   │
+  │ .btn-primary          │      │ .progress-bar         │
+  │ .btn-secondary        │      │ ──────────────────── │
+  │ ──────────────────── │      │ 자식:                 │
+  │ 구현: <a href="#id"> │      │  .progress-bar__fill  │
+  │ 높이: 52px / 44px    │      │  .progress-bar__text  │
+  └──────────────────────┘      └──────────────────────┘
+
+
+────────────────────────────────────────────────────────────────
+7. 캐릭터 컴포넌트 클래스
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────┐
+  │          CharacterGuide [C][H]           │
+  │          .character-guide                 │
+  │ ──────────────────────────────────────── │
+  │ 자식:                                    │
+  │   Character (.character)                 │
+  │   SpeechBubble (.speech-bubble)          │
+  │ ──────────────────────────────────────── │
+  │ CSS:                                     │
+  │   display: flex, gap: 12px               │
+  │   animation: bounce 0.6s (첫 등장)       │
+  └──────────────────────────────────────────┘
+         │
+         │ 포함
+         ↓
+  ┌──────────────────────────────────────────┐
+  │           Character [C][A]               │
+  │           .character                      │
+  │ ──────────────────────────────────────── │
+  │ 속성:                                    │
+  │   src: "/img/maumi-{표정}.svg"           │
+  │   alt: "마음이 캐릭터 {표정} 표정"       │
+  │   expression: Expression enum            │
+  │ ──────────────────────────────────────── │
+  │ 크기 변형 (modifier):                    │
+  │   .character           48px (기본)       │
+  │   .character--small    36px (카드 내)     │
+  │   .character--large    64px (히어로)      │
+  │ ──────────────────────────────────────── │
+  │ 표정 (Expression enum):                  │
+  │   기본 | 반가움 | 경청 | 공감 |          │
+  │   응원 | 위로 | 축하                     │
+  └──────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────┐
+  │         SpeechBubble [C]                 │
+  │         .speech-bubble                    │
+  │ ──────────────────────────────────────── │
+  │ CSS:                                     │
+  │   background: #F8F9FA                    │
+  │   border-radius: 12px                    │
+  │   padding: 14px 16px                     │
+  │   ::before (꼬리 삼각형)                 │
+  │ ──────────────────────────────────────── │
+  │ 내용: 캐릭터 대사 텍스트 (14px, #555)    │
+  └──────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────┐
+  │        ReactionGroup [C]                 │
+  │        .reaction                          │
+  │ ──────────────────────────────────────── │
+  │ 기본 상태: display: none                 │
+  │ :checked 시: display: block              │
+  │ 애니메이션: fadeIn 0.3s                  │
+  │ ──────────────────────────────────────── │
+  │ 자식:                                    │
+  │   CharacterGuide (표정+대사)             │
+  │ ──────────────────────────────────────── │
+  │ 변형 (선택별):                           │
+  │   .reaction-positive (긍정 → 응원)       │
+  │   .reaction-neutral  (중립 → 기본)       │
+  │   .reaction-negative (부정 → 공감)       │
+  │ ──────────────────────────────────────── │
+  │ CSS 연동:                                │
+  │   #q1-pos:checked ~ .reaction-positive   │
+  │   { display: block; }                    │
+  └──────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────
+8. 입력 컴포넌트 클래스
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────┐
+  │          InputGroup [C] (추상)           │
+  │ ──────────────────────────────────────── │
+  │ 공통 속성:                               │
+  │   name: string                           │
+  │   required: false (항상)                 │
+  │ ──────────────────────────────────────── │
+  │ 공통 자식:                               │
+  │   .option__input (숨겨진 input)          │
+  │   .option__label (보이는 label)          │
+  └──────────────────────────────────────────┘
+         │
+         ├── RadioGroup [C]
+         │   .option-list
+         │   input type="radio"
+         │   자식: .option__indicator (○→●)
+         │         .option__text
+         │         .option__check (✓)
+         │   상태: :checked → 배경+보더 변경
+         │
+         ├── CheckboxGroup [C]
+         │   .option-list
+         │   input type="checkbox"
+         │   자식: .option__checkbox (□→☑)
+         │         .option__text
+         │   상태: :checked → 배경+체크마크
+         │
+         ├── LikertScale [C]
+         │   .likert
+         │   input type="radio" ×5 (같은 name)
+         │   자식: .likert__question (문항)
+         │         .likert__labels (전혀/보통/매우)
+         │         .likert__dot ×5 (원형)
+         │   상태: :checked → 원 크기+색상 변경
+         │
+         ├── CardGrid [C]
+         │   .card-grid
+         │   input type="radio"
+         │   자식: .card-grid__emoji
+         │         .card-grid__title
+         │         .card-grid__sub
+         │   상태: :checked → 보더+그림자+체크
+         │   CSS: grid 2×2, gap 12px
+         │
+         ├── SliderGroup [C]
+         │   .slider-group
+         │   input type="range"
+         │   자식: .slider-group__label ×2 (양끝)
+         │
+         ├── TabSwitch [C]
+         │   .tab
+         │   input type="radio" ×2 (name="tab")
+         │   자식: .tab__label ×2
+         │         .tab__content--write (textarea)
+         │         .tab__content--select (radio 선택지)
+         │   상태: :checked → 탭 내용 전환
+         │
+         └── TextareaGroup [C]
+             .textarea-group
+             <textarea>
+             자식: .textarea-group__input
+                   .textarea-group__note ("저장 안 됨")
+             제약: 데이터 미저장, 새로고침 시 삭제
+
+
+────────────────────────────────────────────────────────────────
+9. 결과 컴포넌트 클래스
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────┐
+  │         ResultVariant [C]                │
+  │         .result                           │
+  │ ──────────────────────────────────────── │
+  │ 기본 상태: display: none                 │
+  │ :checked 시: display: block              │
+  │ ──────────────────────────────────────── │
+  │ 변형:                                    │
+  │   .result-sunny   (#q1-sunny:checked)    │
+  │   .result-cloudy  (#q1-cloudy:checked)   │
+  │   .result-rainy   (#q1-rainy:checked)    │
+  │   ...                                    │
+  └──────────────────────────────────────────┘
+         │
+         │ 포함
+         ↓
+  ┌──────────────────────┐  ┌──────────────────────┐
+  │  ResultCard [C]      │  │ PracticeGuide [C]    │
+  │  .result-card         │  │ .practice-guide       │
+  │ ──────────────────── │  │ ──────────────────── │
+  │ CSS:                  │  │ 자식:                 │
+  │  aspect-ratio: 1/1   │  │  CharacterGuide       │
+  │  max-width: 360px    │  │  .practice-guide__list│
+  │  border-radius: 16px │  │ ──────────────────── │
+  │  slideUp 0.5s        │  │ 내용: 행동 3가지     │
+  │ ──────────────────── │  │ 톤: "제안이야"       │
+  │ 자식:                 │  └──────────────────────┘
+  │  .card-decoration    │
+  │  .result-card__title │  ┌──────────────────────┐
+  │  .character--small   │  │ NextWorkshop [C]     │
+  │  .result-card__number│  │ .next-workshop        │
+  │  .result-card__emoji │  │ ──────────────────── │
+  │  .result-card__      │  │ 자식:                 │
+  │    message           │  │  .next-workshop__item│
+  │  .result-card__      │  │  .next-workshop__emoji│
+  │    watermark         │  │  .next-workshop__title│
+  │ ──────────────────── │  │  .type-badge          │
+  │ 색상: 카테고리별     │  └──────────────────────┘
+  │  .card-emotion       │
+  │  .card-esteem        │  ┌──────────────────────┐
+  │  .card-relation      │  │ ShareActions [C]     │
+  │  .card-stress        │  │ .share-actions        │
+  │  .card-career        │  │ ──────────────────── │
+  │  .card-resilience    │  │ 자식:                 │
+  └──────────────────────┘  │  .btn-secondary ×2   │
+                             │  SharePanel           │
+                             └──────────────────────┘
+
+  ┌──────────────────────┐
+  │  SharePanel [C]      │
+  │  .share-panel         │
+  │  <details>            │
+  │ ──────────────────── │
+  │ 자식:                 │
+  │  .share-panel__trigger│ (summary)
+  │  .share-panel__buttons│ (SNS 3개)
+  │  .share-panel__url    │ (URL 텍스트)
+  └──────────────────────┘
+
+
+────────────────────────────────────────────────────────────────
+10. 유형 뱃지 클래스
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────┐
+  │           TypeBadge [C]                  │
+  │           .type-badge                     │
+  │ ──────────────────────────────────────── │
+  │ 변형:                                    │
+  │   .type-badge--select   [선택형]   P1    │
+  │     배경: 카테고리 메인, 글자: 흰색      │
+  │                                          │
+  │   .type-badge--mixed    [혼합형]   P2    │
+  │     배경: 카테고리 연한, 글자: 메인      │
+  │                                          │
+  │   .type-badge--pick     [골라쓰기] P2    │
+  │     배경: 카테고리 연한, 글자: 메인      │
+  │ ──────────────────────────────────────── │
+  │ CSS:                                     │
+  │   font-size: 10px, border-radius: 9px    │
+  │   padding: 2px 8px                       │
+  └──────────────────────────────────────────┘
+
+
+════════════════════════════════════════════════════════════════
+IV. CSS 테마 클래스
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+11. CategoryTheme 클래스
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────┐
+  │        CategoryTheme [C]                 │
+  │        body.category-{name}               │
+  │ ──────────────────────────────────────── │
+  │ CSS 변수 정의:                           │
+  │   --category-color: #{메인색}            │
+  │   --category-light: #{연한색}            │
+  │ ──────────────────────────────────────── │
+  │ 영향 범위:                               │
+  │   모든 var(--category-*) 참조 컴포넌트   │
+  │   버튼, 선택지, 진행률, 결과 카드,       │
+  │   캐릭터 색상, 뱃지 전부 자동 변경       │
+  └──────────────────────────────────────────┘
+         │
+         ├── .category-emotion   { --color: #4A90D9; --light: #EBF4FF; }
+         ├── .category-esteem    { --color: #F5A623; --light: #FFF8E1; }
+         ├── .category-relation  { --color: #4CAF50; --light: #E8F5E9; }
+         ├── .category-stress    { --color: #9C27B0; --light: #F3E5F5; }
+         ├── .category-career    { --color: #FF7043; --light: #FFF3E0; }
+         └── .category-resilience{ --color: #E91E63; --light: #FCE4EC; }
+
+  ★ body class 1개만 바꾸면 전체 페이지 테마 자동 변경
+
+
+════════════════════════════════════════════════════════════════
+V. 에셋 클래스
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+12. 에셋 구조
+────────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────────────┐
+  │          CharacterAsset [A]              │
+  │          /img/maumi-{표정}.svg            │
+  │ ──────────────────────────────────────── │
+  │ 인스턴스:                                │
+  │   maumi-기본.svg    (P1)                 │
+  │   maumi-공감.svg    (P1)                 │
+  │   maumi-응원.svg    (P1)                 │
+  │   maumi-위로.svg    (P2)                 │
+  │   maumi-경청.svg    (P2)                 │
+  │   maumi-반가움.svg  (P2)                 │
+  │   maumi-축하.svg    (P3)                 │
+  │ ──────────────────────────────────────── │
+  │ 제약: 각 10KB 이하, 정사각형             │
+  └──────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────┐
+  │           OGImage [A]                    │
+  │           /img/og/{id}.png                │
+  │ ──────────────────────────────────────── │
+  │ 사양: 1200×630px, PNG, 100KB 이하        │
+  │ 내용: 카테고리색 + 제목 + 캐릭터          │
+  │ 제작: Canva 템플릿 기반                  │
+  │ ──────────────────────────────────────── │
+  │ 인스턴스: 워크숍당 1개                   │
+  │   og/default.png                         │
+  │   og/M01.png ~ og/F25.png               │
+  └──────────────────────────────────────────┘
+
+
+════════════════════════════════════════════════════════════════
+VI. CSS 파일 ↔ 클래스 매핑
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+13. CSS 파일별 담당 클래스
+────────────────────────────────────────────────────────────────
+
+  style.css (~8KB)
+  ├── body, main                     (레이아웃)
+  ├── .header, .header__*            (헤더)
+  ├── .crisis-help, .crisis-help__*  (위기 푸터)
+  ├── .btn-primary, .btn-secondary   (버튼)
+  ├── .progress-bar, .progress-bar__*(진행률)
+  ├── .share-panel, .share-panel__*  (공유)
+  ├── .category-*                    (테마 CSS 변수)
+  ├── @keyframes (fadeIn, slideUp,   (애니메이션)
+  │   pulse, bounce, wiggle, sparkle)
+  ├── @media (min-width: 640px)      (반응형)
+  └── @media (prefers-reduced-motion)(접근성)
+
+  workshop.css (~6KB)
+  ├── section (:target 전환 로직)    (단계 전환)
+  ├── .option__*, .option-list       (radio/checkbox)
+  ├── .likert, .likert__*            (리커트 5점)
+  ├── .card-grid, .card-grid__*      (카드 2×2)
+  ├── .slider-group, .slider-group__*(슬라이더)
+  ├── .tab, .tab__*                  (탭 전환)
+  ├── .textarea-group, .textarea__*  (서술)
+  ├── details, summary               (접기/펼치기)
+  └── :checked + ~ 결과 분기 패턴    (결과 로직)
+
+  result-card.css (~3KB)
+  ├── .result, .result-*              (결과 변형)
+  ├── .result-card, .result-card__*  (결과 카드)
+  ├── .card-emotion ~ .card-resilience(카드 색상)
+  ├── .card-decoration               (CSS 장식)
+  ├── .practice-guide, .__list       (실천 가이드)
+  ├── .next-workshop, .__*           (추천)
+  └── .share-actions                  (공유 버튼)
+
+  character.css (~4KB)
+  ├── .character-guide               (캐릭터+말풍선)
+  ├── .character, .character--*      (캐릭터 크기)
+  ├── .speech-bubble, ::before       (말풍선+꼬리)
+  ├── .reaction, .reaction-*         (반응 표시/숨김)
+  ├── :checked ~ .reaction-* 패턴   (반응 연동)
+  └── .type-badge, .type-badge--*    (유형 뱃지)
+
+
+════════════════════════════════════════════════════════════════
+VII. 클래스 관계 요약
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+14. 주요 관계 유형
+────────────────────────────────────────────────────────────────
+
+  ■ 상속 (extends)
+
+  Page
+   ├── MainPage
+   ├── AboutPage
+   ├── MiniWorkshop
+   ├── FullWorkshop
+   │    ├── TypeA (선택형)
+   │    ├── TypeB (혼합형)
+   │    └── TypeC (서술대안형)
+   ├── ChallengeDay (extends FullWorkshop)
+   ├── ChallengeIndex
+   ├── ChallengeComplete
+   └── EventLanding
+
+  ■ 포함 (has-a)
+
+  Page ──has──→ Header
+  Page ──has──→ CrisisHelp
+  Page ──has──→ Section[]
+  Section ──has──→ CharacterGuide
+  ExperienceForm ──has──→ InputGroup[]
+  ExperienceForm ──has──→ ReactionGroup[]
+  ExperienceForm ──has──→ ResultVariant[]
+  ResultVariant ──has──→ ResultCard
+  ResultVariant ──has──→ PracticeGuide
+  ResultVariant ──has──→ ShareActions
+  CharacterGuide ──has──→ Character
+  CharacterGuide ──has──→ SpeechBubble
+
+  ■ 참조 (links-to)
+
+  MiniWorkshop ──links──→ FullWorkshop (전환 추천)
+  FullWorkshop ──links──→ FullWorkshop[] (다른 풀 추천)
+  FullWorkshop ──links──→ ChallengeIndex (챌린지 연결)
+  ChallengeDay ──links──→ ChallengeIndex (돌아가기)
+  ChallengeDay ──links──→ ChallengeComplete (마지막 Day)
+  EventLanding ──links──→ MiniWorkshop[] + FullWorkshop[]
+
+  ■ CSS 상태 연동 (:checked ~)
+
+  InputGroup.:checked ──triggers──→ ReactionGroup (표시)
+  InputGroup.:checked ──triggers──→ ResultVariant (표시)
+  TabSwitch.:checked ──triggers──→ TabContent (전환)
+
+  ■ CSS 테마 연동 (CSS 변수)
+
+  CategoryTheme ──themes──→ 전체 컴포넌트 색상
+
+
+────────────────────────────────────────────────────────────────
+15. 인스턴스 수 요약
+────────────────────────────────────────────────────────────────
+
+  클래스              인스턴스 수 (Phase 3 기준)
+  ═══════════════════════════════════════════════════════════
+  MainPage            1
+  AboutPage           1
+  MiniWorkshop        13 (M01~M13)
+  FullWorkshop        25 (F01~F25)
+  ChallengeIndex      4 (C01~C04)
+  ChallengeDay        33 (7+7+7+12)
+  ChallengeComplete   4
+  EventLanding        가변 (행사당 1개)
+  ───────────────────────────────────────────────────────────
+  HTML 파일 합계      81+ 개
+  ───────────────────────────────────────────────────────────
+  CharacterAsset      7 (표정별 SVG)
+  OGImage             50+ (워크숍당 1개)
+  CSS 파일            4
+  ═══════════════════════════════════════════════════════════
+
+
+================================================================
+  본 클래스 다이어그램은 v1.0이며,
+  HTML+CSS only 아키텍처의 구조를
+  CSS 클래스·HTML 구조·파일 단위로 객체 모델화했습니다.
+
+  참조 문서:
+  - 어플리케이션아키텍처 v1.0
+  - 인터페이스명세서 v1.0
+  - 데이터아키텍처 v1.0
+  - 콘텐츠매트릭스 v2.0
+================================================================

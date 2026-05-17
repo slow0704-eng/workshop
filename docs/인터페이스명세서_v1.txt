@@ -1,0 +1,1300 @@
+================================================================
+        "마음 워크숍" 인터페이스 명세서
+        v1.0
+================================================================
+
+작성일: 2026년 3월 14일
+기준 문서: 와이어프레임 v2.0 / 어플리케이션아키텍처 v1.0
+          요구사항정의서 v1.0 / 용어사전 v1.0
+
+문서 목적:
+  모든 UI 컴포넌트의 정확한 사양을 정의.
+  HTML 태그, CSS 속성, 상태 변화, 사이즈, 색상, 간격을
+  개발 즉시 구현 가능한 수준으로 명세.
+
+단위: px (모바일 375px 기준), 색상 HEX, 시간 s
+
+
+════════════════════════════════════════════════════════════════
+I. 글로벌 컴포넌트
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+IF-001: 공통 헤더
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ┌─────────────────────────────────────┐
+  │ ◜◝ 마음 워크숍                [홈] │
+  └─────────────────────────────────────┘
+
+  ■ HTML
+  <header class="header">
+    <a href="/index.html" class="header__logo">
+      <img src="/img/maumi-기본.svg" alt="마음이" class="header__icon">
+      <span>마음 워크숍</span>
+    </a>
+    <a href="/index.html" class="header__home">홈</a>
+  </header>
+
+  ■ CSS 속성
+
+  속성                    값
+  ─────────────────────────────────────────
+  height                  48px
+  background              #FFFFFF
+  border-bottom           1px solid #E0E0E0
+  position                sticky
+  top                     0
+  z-index                 100
+  display                 flex
+  justify-content         space-between
+  align-items             center
+  padding                 0 24px
+
+  .header__icon
+    width                 20px
+    height                20px
+    margin-right          6px
+    vertical-align        middle
+
+  .header__logo span
+    font-size             16px
+    font-weight           700
+    color                 #333
+    text-decoration       none
+
+  .header__home
+    font-size             14px
+    color                 #666
+    text-decoration       none
+
+
+────────────────────────────────────────────────────────────────
+IF-002: 위기 상담 안내 푸터
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ┌─────────────────────────────────────┐
+  │ 지금 힘든 순간이라면,              │
+  │ 혼자 감당하지 않아도 됩니다.       │
+  │ 자살예방상담전화 1393              │
+  │ 정신건강위기상담 1577-0199         │
+  │ 청소년상담 1388                    │
+  │ ─────────────────────────────────  │
+  │ 마음 워크숍 | 무료 공공 서비스     │
+  └─────────────────────────────────────┘
+
+  ■ HTML
+  <footer class="crisis-help">
+    <p class="crisis-help__message">
+      지금 힘든 순간이라면,<br>
+      혼자 감당하지 않아도 됩니다.
+    </p>
+    <ul class="crisis-help__numbers">
+      <li><a href="tel:1393" aria-label="자살예방상담전화 1393 전화 걸기">
+        자살예방상담전화 1393</a></li>
+      <li><a href="tel:15770199" aria-label="정신건강위기상담 1577-0199 전화 걸기">
+        정신건강위기상담 1577-0199</a></li>
+      <li><a href="tel:1388" aria-label="청소년상담 1388 전화 걸기">
+        청소년상담 1388</a></li>
+    </ul>
+    <div class="crisis-help__info">
+      마음 워크숍 | 무료 공공 서비스<br>
+      maum-workshop.github.io
+    </div>
+  </footer>
+
+  ■ CSS 속성
+
+  .crisis-help
+    background              #F5F5F5
+    padding                 24px
+    margin-top              40px
+
+  .crisis-help__message
+    font-size               14px
+    color                   #666
+    line-height             1.6
+    margin-bottom           16px
+
+  .crisis-help__numbers li
+    font-size               14px
+    margin-bottom           8px
+
+  .crisis-help__numbers a
+    color                   #666
+    text-decoration         underline
+
+  .crisis-help__info
+    border-top              1px solid #E0E0E0
+    padding-top             16px
+    margin-top              16px
+    font-size               12px
+    color                   #999
+
+  ■ 제약 사항
+  - ★ 캐릭터 요소 (.character, .speech-bubble) 포함 금지
+  - ★ 모든 페이지에 필수 포함 (예외 없음)
+  - 전화번호는 반드시 <a href="tel:"> 링크
+
+
+────────────────────────────────────────────────────────────────
+IF-003: 주요 액션 버튼
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ┌─────────────────────────────────────┐
+  │          같이 해보자! →            │
+  └─────────────────────────────────────┘
+
+  ■ HTML
+  <a href="#explore" class="btn-primary">같이 해보자! →</a>
+
+  ■ CSS 속성
+
+  .btn-primary
+    display                 block
+    width                   calc(100% - 48px)
+    margin                  0 24px
+    height                  52px
+    line-height             52px
+    text-align              center
+    font-size               16px
+    font-weight             700
+    color                   #FFFFFF
+    background              var(--category-color)
+    border                  none
+    border-radius           12px
+    text-decoration         none
+    cursor                  pointer
+
+  ■ 카테고리별 --category-color
+
+  category-emotion          #4A90D9
+  category-esteem           #F5A623
+  category-relation         #4CAF50
+  category-stress           #9C27B0
+  category-career           #FF7043
+  category-resilience       #E91E63
+
+  ■ 상태
+
+  상태          변화
+  ─────────────────────────────
+  기본          위 속성 그대로
+  hover/active  opacity: 0.85
+  focus         outline: 2px solid var(--category-color), offset 2px
+
+
+────────────────────────────────────────────────────────────────
+IF-004: 보조 액션 버튼
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃 (2열)
+  ┌───────────┐  ┌───────────┐
+  │ 이미지    │  │ 링크      │
+  │ 저장하기  │  │ 공유하기  │
+  └───────────┘  └───────────┘
+
+  ■ CSS 속성
+
+  .btn-secondary
+    display                 inline-block
+    width                   calc(50% - 28px)
+    height                  44px
+    line-height             44px
+    text-align              center
+    font-size               14px
+    color                   var(--category-color)
+    background              #FFFFFF
+    border                  1px solid var(--category-color)
+    border-radius           8px
+    text-decoration         none
+
+  .share-actions
+    display                 flex
+    gap                     8px
+    padding                 0 24px
+
+
+────────────────────────────────────────────────────────────────
+IF-005: 진행률 바
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ━━━━━━━━━━━━━━━━━━━━ 2/4
+
+  ■ HTML
+  <div class="progress-bar">
+    <div class="progress-bar__fill" style="width: 50%"></div>
+    <span class="progress-bar__text">2/4</span>
+  </div>
+
+  ■ CSS 속성
+
+  .progress-bar
+    height                  4px
+    background              #E0E0E0
+    border-radius           2px
+    position                relative
+    margin                  16px 24px
+
+  .progress-bar__fill
+    height                  100%
+    background              var(--category-color)
+    border-radius           2px
+    transition              width 0.3s ease
+
+  .progress-bar__text
+    position                absolute
+    right                   0
+    top                     -18px
+    font-size               12px
+    color                   #999
+
+
+════════════════════════════════════════════════════════════════
+II. 캐릭터 컴포넌트
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+IF-010: 캐릭터 + 말풍선 가이드
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ┌─────────────────────────────────────┐
+  │  ◜◝   ┌───────────────────────┐    │
+  │ ( ◡ ◡ ) │ 대사 텍스트          │    │
+  │  ◟◞   └───────────────────────┘    │
+  └─────────────────────────────────────┘
+
+  ■ HTML
+  <div class="character-guide">
+    <img src="/img/maumi-기본.svg"
+         alt="마음이 캐릭터 기본 표정"
+         class="character character--기본">
+    <div class="speech-bubble">
+      대사 텍스트
+    </div>
+  </div>
+
+  ■ CSS 속성
+
+  .character-guide
+    display                 flex
+    align-items             flex-start
+    gap                     12px
+    margin                  16px 24px
+    animation               bounce 0.6s ease-out
+
+  .character
+    width                   48px
+    height                  48px
+    flex-shrink             0
+    border-radius           50%
+
+  .speech-bubble
+    background              #F8F9FA
+    border-radius           12px
+    padding                 14px 16px
+    font-size               14px
+    color                   #555
+    line-height             1.6
+    position                relative
+    max-width               calc(100% - 72px)
+
+  .speech-bubble::before    (말풍선 꼬리)
+    content                 ""
+    position                absolute
+    left                    -6px
+    top                     16px
+    width                   0
+    height                  0
+    border-top              6px solid transparent
+    border-bottom           6px solid transparent
+    border-right            6px solid #F8F9FA
+
+  ■ 캐릭터 크기 변형
+
+  용도                class               width/height
+  ─────────────────────────────────────────────────
+  기본 (체험 중)      .character           48px
+  결과 카드 내        .character--small    36px
+  히어로 (메인)       .character--large    64px
+  헤더 아이콘         .header__icon        20px
+
+  ■ 캐릭터 표정 파일
+
+  표정          파일명                  Phase
+  ─────────────────────────────────────────────
+  기본미소      maumi-기본.svg          P1
+  공감          maumi-공감.svg          P1
+  응원          maumi-응원.svg          P1
+  위로          maumi-위로.svg          P2
+  경청          maumi-경청.svg          P2
+  반가움        maumi-반가움.svg        P2
+  축하          maumi-축하.svg          P3
+
+
+────────────────────────────────────────────────────────────────
+IF-011: 캐릭터 :checked 반응
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃 (선택 후 표시)
+  ┌─────────────────────────────────────┐
+  │  ◜◝   ┌───────────────────────┐    │
+  │ ( ◡ ◡ ) │ 좀 피곤한 아침       │    │
+  │  ◟◞   │ 이었나 봐.           │    │
+  │        └───────────────────────┘    │
+  └─────────────────────────────────────┘
+
+  ■ HTML
+  <!-- input들 뒤에 배치 (형제 관계 필수) -->
+  <div class="reaction reaction-negative">
+    <div class="character-guide">
+      <img src="/img/maumi-공감.svg"
+           alt="마음이 공감 표정"
+           class="character">
+      <div class="speech-bubble">
+        좀 피곤한 아침이었나 봐.
+      </div>
+    </div>
+  </div>
+
+  ■ CSS 속성
+
+  .reaction
+    display                 none
+
+  /* :checked 연동 표시 */
+  #q1-negative:checked ~ .reaction-negative
+    display                 block
+    animation               fadeIn 0.3s ease-in
+
+  ■ 제약 사항
+  - input과 reaction div가 같은 부모(form) 안의 형제여야 함
+  - 부모-자식 관계에서는 :checked + ~ 작동하지 않음
+
+
+════════════════════════════════════════════════════════════════
+III. 선택지 컴포넌트
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+IF-020: Radio 단일 선택
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  미선택:
+  ┌─────────────────────────────────────┐
+  │  ○ ☀ 개운했다                       │
+  └─────────────────────────────────────┘
+  선택됨:
+  ┌─────────────────────────────────────┐
+  │  ● ☀ 개운했다                  ✓   │
+  └─────────────────────────────────────┘
+
+  ■ HTML
+  <div class="option-list">
+    <input type="radio" id="q1-sunny" name="q1" class="option__input">
+    <label for="q1-sunny" class="option__label">
+      <span class="option__indicator"></span>
+      <span class="option__text">☀ 개운했다</span>
+      <span class="option__check">✓</span>
+    </label>
+  </div>
+
+  ■ CSS 속성
+
+  .option__input
+    position                absolute
+    opacity                 0
+    width                   0
+    height                  0
+
+  .option__label
+    display                 flex
+    align-items             center
+    height                  52px
+    padding                 0 16px
+    background              #FFFFFF
+    border                  1px solid #E0E0E0
+    border-radius           8px
+    margin-bottom           8px
+    cursor                  pointer
+    font-size               15px
+    color                   #333
+    transition              all 0.2s ease
+
+  .option__indicator        (○ 원형)
+    width                   20px
+    height                  20px
+    border                  2px solid #D0D0D0
+    border-radius           50%
+    margin-right            12px
+    flex-shrink             0
+
+  .option__check            (✓ 체크마크)
+    display                 none
+    margin-left             auto
+    color                   var(--category-color)
+    font-weight             700
+
+  /* 선택됨 상태 */
+  .option__input:checked + .option__label
+    background              var(--category-light)
+    border-color            var(--category-color)
+
+  .option__input:checked + .option__label .option__indicator
+    background              var(--category-color)
+    border-color            var(--category-color)
+
+  .option__input:checked + .option__label .option__check
+    display                 block
+
+  /* Focus 상태 */
+  .option__input:focus + .option__label
+    outline                 2px solid var(--category-color)
+    outline-offset          2px
+
+  ■ 카테고리별 --category-light
+
+  category-emotion          #EBF4FF
+  category-esteem           #FFF8E1
+  category-relation         #E8F5E9
+  category-stress           #F3E5F5
+  category-career           #FFF3E0
+  category-resilience       #FCE4EC
+
+
+────────────────────────────────────────────────────────────────
+IF-021: Checkbox 복수 선택
+────────────────────────────────────────────────────────────────
+
+  ■ HTML
+  <input type="checkbox" id="s1" name="strengths" class="option__input">
+  <label for="s1" class="option__label">
+    <span class="option__checkbox"></span>
+    <span class="option__text">새로운 것을 배우는 걸 좋아한다</span>
+  </label>
+
+  ■ CSS 속성 — radio와 동일 구조, indicator만 차이
+
+  .option__checkbox         (□ 사각형)
+    width                   20px
+    height                  20px
+    border                  2px solid #D0D0D0
+    border-radius           4px
+    margin-right            12px
+
+  .option__input:checked + .option__label .option__checkbox
+    background              var(--category-color)
+    border-color            var(--category-color)
+    /* ✓ 체크마크는 ::after로 구현 */
+
+  .option__input:checked + .option__label .option__checkbox::after
+    content                 "✓"
+    color                   #FFFFFF
+    font-size               14px
+    display                 flex
+    justify-content         center
+    align-items             center
+
+
+────────────────────────────────────────────────────────────────
+IF-022: 리커트 5점 척도
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ┌─────────────────────────────────────┐
+  │ "나는 실수를 쉽게 용서하는 편이다"  │
+  │                                     │
+  │ 전혀       보통       매우          │
+  │ 아니다     이다       그렇다        │
+  │  ○   ○   ●   ○   ○              │
+  │  1   2   3   4   5              │
+  └─────────────────────────────────────┘
+
+  ■ HTML
+  <fieldset class="likert">
+    <legend class="likert__question">
+      나는 실수를 쉽게 용서하는 편이다
+    </legend>
+    <div class="likert__labels">
+      <span>전혀 아니다</span>
+      <span>보통이다</span>
+      <span>매우 그렇다</span>
+    </div>
+    <div class="likert__scale">
+      <input type="radio" id="lk1-1" name="lk1" value="1" class="likert__input">
+      <label for="lk1-1" class="likert__dot"><span>1</span></label>
+      <input type="radio" id="lk1-2" name="lk1" value="2" class="likert__input">
+      <label for="lk1-2" class="likert__dot"><span>2</span></label>
+      <input type="radio" id="lk1-3" name="lk1" value="3" class="likert__input">
+      <label for="lk1-3" class="likert__dot"><span>3</span></label>
+      <input type="radio" id="lk1-4" name="lk1" value="4" class="likert__input">
+      <label for="lk1-4" class="likert__dot"><span>4</span></label>
+      <input type="radio" id="lk1-5" name="lk1" value="5" class="likert__input">
+      <label for="lk1-5" class="likert__dot"><span>5</span></label>
+    </div>
+  </fieldset>
+
+  ■ CSS 속성
+
+  .likert
+    border                  none
+    padding                 20px 0
+    border-bottom           1px solid #F0F0F0
+
+  .likert__question
+    font-size               15px
+    font-weight             700
+    line-height             1.5
+    color                   #333
+    margin-bottom           16px
+
+  .likert__labels
+    display                 flex
+    justify-content         space-between
+    font-size               12px
+    color                   #999
+    margin-bottom           8px
+
+  .likert__scale
+    display                 flex
+    justify-content         space-between
+    padding                 0 8px
+
+  .likert__input
+    position                absolute
+    opacity                 0
+
+  .likert__dot
+    display                 flex
+    flex-direction          column
+    align-items             center
+    cursor                  pointer
+    padding                 8px
+
+  .likert__dot::before      (원형)
+    content                 ""
+    width                   24px
+    height                  24px
+    border                  2px solid #D0D0D0
+    border-radius           50%
+    margin-bottom           4px
+    transition              all 0.2s ease
+
+  .likert__dot span         (숫자)
+    font-size               12px
+    color                   #BBB
+
+  /* 선택됨 */
+  .likert__input:checked + .likert__dot::before
+    width                   28px
+    height                  28px
+    background              var(--category-color)
+    border-color            var(--category-color)
+
+  /* 터치 영역 보장 */
+  .likert__dot
+    min-width               44px
+    min-height              44px
+
+
+────────────────────────────────────────────────────────────────
+IF-023: 카드 2×2 선택
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ┌──────────┐  ┌──────────┐
+  │    ☀    │  │    🌊    │
+  │  성장    │  │  고요    │
+  └──────────┘  └──────────┘
+  ┌──────────┐  ┌──────────┐
+  │    🌱    │  │    ❤    │
+  │  자유    │  │  관계    │
+  └──────────┘  └──────────┘
+
+  ■ HTML
+  <div class="card-grid">
+    <input type="radio" id="v1" name="value" class="card-grid__input">
+    <label for="v1" class="card-grid__card">
+      <span class="card-grid__emoji">☀</span>
+      <span class="card-grid__title">성장</span>
+      <span class="card-grid__sub">·도전</span>
+    </label>
+    <!-- 반복 ×4 -->
+  </div>
+
+  ■ CSS 속성
+
+  .card-grid
+    display                 grid
+    grid-template-columns   1fr 1fr
+    gap                     12px
+    padding                 0 24px
+
+  .card-grid__input
+    position                absolute
+    opacity                 0
+
+  .card-grid__card
+    display                 flex
+    flex-direction          column
+    align-items             center
+    justify-content         center
+    aspect-ratio            1 / 1
+    background              #FFFFFF
+    border                  1px solid #E0E0E0
+    border-radius           12px
+    cursor                  pointer
+    transition              all 0.2s ease
+
+  .card-grid__emoji
+    font-size               32px
+    margin-bottom           8px
+
+  .card-grid__title
+    font-size               15px
+    font-weight             700
+    color                   #333
+
+  .card-grid__sub
+    font-size               13px
+    color                   #666
+
+  /* 선택됨 */
+  .card-grid__input:checked + .card-grid__card
+    border                  2px solid var(--category-color)
+    background              var(--category-light)
+    box-shadow              0 2px 8px rgba(0,0,0,0.1)
+
+  .card-grid__input:checked + .card-grid__card::after
+    content                 "✓"
+    position                absolute
+    top                     8px
+    right                   8px
+    color                   var(--category-color)
+    font-weight             700
+
+
+────────────────────────────────────────────────────────────────
+IF-024: 슬라이더 (Range)
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  약함 ─────────●───── 강함
+
+  ■ HTML
+  <div class="slider-group">
+    <span class="slider-group__label">약함</span>
+    <input type="range" min="1" max="5" value="3"
+           class="slider-group__input"
+           aria-label="감정 강도">
+    <span class="slider-group__label">강함</span>
+  </div>
+
+  ■ CSS 속성
+
+  .slider-group
+    display                 flex
+    align-items             center
+    gap                     12px
+    padding                 0 24px
+    margin                  16px 0
+
+  .slider-group__label
+    font-size               13px
+    color                   #999
+    flex-shrink             0
+
+  .slider-group__input
+    -webkit-appearance      none
+    width                   100%
+    height                  4px
+    background              #E0E0E0
+    border-radius           2px
+    outline                 none
+
+  .slider-group__input::-webkit-slider-thumb
+    -webkit-appearance      none
+    width                   24px
+    height                  24px
+    border-radius           50%
+    background              var(--category-color)
+    cursor                  pointer
+    /* 44px 터치 영역은 padding으로 확보 */
+
+
+────────────────────────────────────────────────────────────────
+IF-025: 탭 전환 (직접 쓰기 / 골라 쓰기)
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ┌━━━━━━━━━━━━━━┬──────────────┐
+  │  ✍ 직접 쓰기 │ ☑ 골라 쓰기  │
+  └━━━━━━━━━━━━━━┴──────────────┘
+
+  ■ HTML
+  <div class="tab">
+    <input type="radio" id="tab-write" name="tab"
+           class="tab__input">
+    <label for="tab-write" class="tab__label">✍ 직접 쓰기</label>
+
+    <input type="radio" id="tab-select" name="tab"
+           class="tab__input" checked>
+    <label for="tab-select" class="tab__label">☑ 골라 쓰기</label>
+
+    <div class="tab__content tab__content--write">
+      <!-- textarea 영역 -->
+    </div>
+    <div class="tab__content tab__content--select">
+      <!-- radio 선택지 영역 -->
+    </div>
+  </div>
+
+  ■ CSS 속성
+
+  .tab__input
+    position                absolute
+    opacity                 0
+
+  .tab__label
+    display                 inline-flex
+    align-items             center
+    justify-content         center
+    width                   50%
+    height                  44px
+    font-size               14px
+    font-weight             700
+    cursor                  pointer
+    border-bottom           1px solid #E0E0E0
+    color                   #999
+
+  /* 활성 탭 */
+  .tab__input:checked + .tab__label
+    color                   var(--category-color)
+    border-bottom           2px solid var(--category-color)
+
+  /* 탭 내용 전환 */
+  .tab__content--write
+    display                 none
+  .tab__content--select
+    display                 block
+
+  #tab-write:checked ~ .tab__content--write
+    display                 block
+  #tab-write:checked ~ .tab__content--select
+    display                 none
+
+
+────────────────────────────────────────────────────────────────
+IF-026: Textarea 자유 서술
+────────────────────────────────────────────────────────────────
+
+  ■ HTML
+  <div class="textarea-group">
+    <textarea class="textarea-group__input"
+              rows="4"
+              placeholder="자유롭게 적어보세요. 한 줄이라도 괜찮아."
+              aria-label="자유 서술"></textarea>
+    <p class="textarea-group__note">답은 저장되지 않아요.</p>
+  </div>
+
+  ■ CSS 속성
+
+  .textarea-group__input
+    width                   calc(100% - 48px)
+    margin                  0 24px
+    padding                 16px
+    font-size               15px
+    line-height             1.6
+    color                   #333
+    border                  1px solid #E0E0E0
+    border-radius           12px
+    resize                  none
+    font-family             inherit
+    background              #FFFFFF
+
+  .textarea-group__input:focus
+    border-color            var(--category-color)
+    outline                 none
+
+  .textarea-group__input::placeholder
+    color                   #BBB
+
+  .textarea-group__note
+    font-size               12px
+    color                   #BBB
+    text-align              center
+    margin-top              8px
+
+
+════════════════════════════════════════════════════════════════
+IV. 결과 컴포넌트
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+IF-030: 결과 카드
+────────────────────────────────────────────────────────────────
+
+  ■ 레이아웃
+  ┌─────────────────────────────────────┐
+  │      ✧  ·  ✦                       │
+  │   나의 에너지 잔량                  │
+  │  ◜◝       30%                      │
+  │ ( ◡ ◡ )     ☁                       │
+  │  ◟◞                               │
+  │  "작은 쉼 하나가                    │
+  │   내일의 에너지가 됩니다"           │
+  │        ·  ✧  ·                      │
+  │  maum-workshop.github.io           │
+  └─────────────────────────────────────┘
+
+  ■ HTML
+  <div class="result-card card-stress">
+    <div class="card-decoration card-decoration--top">✧ · ✦</div>
+    <p class="result-card__title">나의 에너지 잔량</p>
+    <div class="result-card__main">
+      <img src="/img/maumi-위로.svg" alt="마음이 위로 표정"
+           class="character character--small">
+      <div class="result-card__value">
+        <span class="result-card__number">30%</span>
+        <span class="result-card__emoji">☁</span>
+      </div>
+    </div>
+    <p class="result-card__message">
+      "작은 쉼 하나가<br>내일의 에너지가 됩니다"
+    </p>
+    <div class="card-decoration card-decoration--bottom">· ✧ ·</div>
+    <p class="result-card__watermark">maum-workshop.github.io</p>
+  </div>
+
+  ■ CSS 속성
+
+  .result-card
+    aspect-ratio            1 / 1
+    max-width               360px
+    margin                  0 auto
+    padding                 32px
+    border-radius           16px
+    box-shadow              0 2px 12px rgba(0,0,0,0.08)
+    display                 flex
+    flex-direction          column
+    justify-content         space-between
+    align-items             center
+    text-align              center
+    animation               slideUp 0.5s ease-out
+
+  /* 카테고리별 배경 */
+  .card-emotion     { background: #EBF4FF; }
+  .card-esteem      { background: #FFF8E1; }
+  .card-relation    { background: #E8F5E9; }
+  .card-stress      { background: #F3E5F5; }
+  .card-career      { background: #FFF3E0; }
+  .card-resilience  { background: #FCE4EC; }
+
+  .result-card__title
+    font-size               14px
+    color                   #666
+
+  .result-card__number
+    font-size               48px
+    font-weight             700
+    color                   #333
+
+  .result-card__emoji
+    font-size               32px
+
+  .result-card__message
+    font-size               16px
+    font-weight             700
+    color                   #333
+    line-height             1.5
+
+  .result-card__watermark
+    font-size               12px
+    color                   #BBB
+
+  .card-decoration
+    font-size               14px
+    color                   #BBB
+    letter-spacing          4px
+
+  .character--small
+    width                   36px
+    height                  36px
+
+
+────────────────────────────────────────────────────────────────
+IF-031: 결과 검열자 대응 메시지
+────────────────────────────────────────────────────────────────
+
+  ■ 위치: 결과 카드 직후
+
+  ■ HTML — IF-010(캐릭터+말풍선) 컴포넌트 재사용
+  <div class="character-guide result-response">
+    <img src="/img/maumi-위로.svg" class="character">
+    <div class="speech-bubble">
+      좀 지친 하루였나 봐.<br>
+      여기까지 온 것만으로도 나를 돌보고 있는 거야.
+    </div>
+  </div>
+
+  ■ CSS 추가 속성
+
+  .result-response
+    margin-top              20px
+
+
+────────────────────────────────────────────────────────────────
+IF-032: 실천 가이드
+────────────────────────────────────────────────────────────────
+
+  ■ HTML
+  <div class="practice-guide">
+    <div class="character-guide">
+      <img src="/img/maumi-기본.svg" class="character">
+      <div class="speech-bubble">
+        이건 그냥 제안이야. 하고 싶은 것만 해봐.
+      </div>
+    </div>
+    <ol class="practice-guide__list">
+      <li>좋아하는 카페에서 혼자 10분 앉아보기</li>
+      <li>어린 시절 좋아했던 것 하나 떠올려보기</li>
+      <li>오늘 나에게 "수고했어" 한마디</li>
+    </ol>
+  </div>
+
+  ■ CSS 속성
+
+  .practice-guide__list
+    background              #FAFAFA
+    border-radius           12px
+    padding                 20px 20px 20px 36px
+    margin                  12px 24px
+    font-size               15px
+    color                   #444
+    line-height             2.0
+
+
+────────────────────────────────────────────────────────────────
+IF-033: 다음 워크숍 추천
+────────────────────────────────────────────────────────────────
+
+  ■ HTML
+  <div class="next-workshop">
+    <a href="/workshop/호흡법.html" class="next-workshop__item">
+      <span class="next-workshop__emoji">🌬</span>
+      <span class="next-workshop__info">
+        <span class="next-workshop__title">화가 날 때 3단계 호흡</span>
+        <span class="next-workshop__meta">
+          감정 관리 · 5분
+          <span class="type-badge type-badge--mixed">혼합형</span>
+        </span>
+      </span>
+      <span class="next-workshop__arrow">→</span>
+    </a>
+  </div>
+
+  ■ CSS 속성
+
+  .next-workshop__item
+    display                 flex
+    align-items             center
+    padding                 16px
+    border                  1px solid #F0F0F0
+    border-radius           8px
+    text-decoration         none
+    color                   #333
+    margin                  0 24px 8px
+
+  .next-workshop__emoji
+    font-size               24px
+    margin-right            12px
+
+  .next-workshop__title
+    font-size               15px
+    font-weight             700
+    display                 block
+
+  .next-workshop__meta
+    font-size               12px
+    color                   #999
+
+  .next-workshop__arrow
+    margin-left             auto
+    color                   #999
+
+
+────────────────────────────────────────────────────────────────
+IF-034: 체험 유형 뱃지
+────────────────────────────────────────────────────────────────
+
+  ■ HTML
+  <span class="type-badge type-badge--select">선택형</span>
+  <span class="type-badge type-badge--mixed">혼합형</span>
+  <span class="type-badge type-badge--pick">골라쓰기</span>
+
+  ■ CSS 속성
+
+  .type-badge
+    display                 inline-block
+    font-size               10px
+    font-weight             700
+    padding                 2px 8px
+    border-radius           9px
+    vertical-align          middle
+    margin-left             4px
+
+  .type-badge--select
+    background              var(--category-color)
+    color                   #FFFFFF
+
+  .type-badge--mixed
+    background              var(--category-light)
+    color                   var(--category-color)
+
+  .type-badge--pick
+    background              var(--category-light)
+    color                   var(--category-color)
+
+
+════════════════════════════════════════════════════════════════
+V. SNS 공유 컴포넌트
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+IF-040: SNS 공유 영역
+────────────────────────────────────────────────────────────────
+
+  ■ HTML
+  <details class="share-panel">
+    <summary class="share-panel__trigger">링크 공유하기</summary>
+    <div class="share-panel__content">
+      <div class="share-panel__buttons">
+        <a href="https://twitter.com/intent/tweet?text=나도 해보기: 5분 마음 워크숍&url=URL"
+           class="share-panel__btn" target="_blank"
+           rel="noopener noreferrer">트위터(X)</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=URL"
+           class="share-panel__btn" target="_blank"
+           rel="noopener noreferrer">페이스북</a>
+        <a href="https://story.kakao.com/share?url=URL"
+           class="share-panel__btn" target="_blank"
+           rel="noopener noreferrer">카카오톡</a>
+      </div>
+      <p class="share-panel__or">또는 링크 복사:</p>
+      <p class="share-panel__url">maum-workshop.github.io/mini/에너지잔량.html</p>
+    </div>
+  </details>
+
+  ■ CSS 속성
+
+  .share-panel
+    margin                  16px 24px
+
+  .share-panel__trigger
+    font-size               14px
+    font-weight             700
+    color                   var(--category-color)
+    cursor                  pointer
+    padding                 12px 0
+    list-style              none
+
+  .share-panel__buttons
+    display                 flex
+    gap                     8px
+    margin                  12px 0
+
+  .share-panel__btn
+    flex                    1
+    height                  44px
+    line-height             44px
+    text-align              center
+    font-size               13px
+    color                   var(--category-color)
+    border                  1px solid var(--category-color)
+    border-radius           8px
+    text-decoration         none
+
+  .share-panel__url
+    background              #F5F5F5
+    padding                 12px
+    border-radius           8px
+    font-size               12px
+    color                   #666
+    word-break              break-all
+    user-select             all
+
+
+════════════════════════════════════════════════════════════════
+VI. 페이지 레이아웃
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+IF-050: 반응형 레이아웃
+────────────────────────────────────────────────────────────────
+
+  ■ 모바일 (기본, ~639px)
+
+  body
+    margin                  0
+    padding                 0
+    font-family             -apple-system, BlinkMacSystemFont,
+                            "Segoe UI", sans-serif
+    color                   #333
+    background              #FFFFFF
+    -webkit-font-smoothing  antialiased
+
+  main
+    padding-top             48px  (헤더 높이)
+    padding-bottom          40px
+
+  ■ PC (640px~)
+
+  @media (min-width: 640px) {
+    body {
+      background            #FAFAFA
+    }
+    main {
+      max-width             540px
+      margin                0 auto
+      background            #FFFFFF
+      box-shadow            0 0 24px rgba(0,0,0,0.05)
+      min-height            100vh
+    }
+  }
+
+
+────────────────────────────────────────────────────────────────
+IF-051: 카테고리 테마 (CSS 변수)
+────────────────────────────────────────────────────────────────
+
+  ■ CSS 변수 정의
+
+  body.category-emotion {
+    --category-color:       #4A90D9;
+    --category-light:       #EBF4FF;
+  }
+  body.category-esteem {
+    --category-color:       #F5A623;
+    --category-light:       #FFF8E1;
+  }
+  body.category-relation {
+    --category-color:       #4CAF50;
+    --category-light:       #E8F5E9;
+  }
+  body.category-stress {
+    --category-color:       #9C27B0;
+    --category-light:       #F3E5F5;
+  }
+  body.category-career {
+    --category-color:       #FF7043;
+    --category-light:       #FFF3E0;
+  }
+  body.category-resilience {
+    --category-color:       #E91E63;
+    --category-light:       #FCE4EC;
+  }
+
+  ★ 모든 컴포넌트가 var(--category-color) / var(--category-light) 참조
+  ★ body class 하나만 바꾸면 전체 테마 변경
+
+
+────────────────────────────────────────────────────────────────
+IF-052: 애니메이션 정의
+────────────────────────────────────────────────────────────────
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.1); }
+  }
+
+  @keyframes bounce {
+    0%   { transform: translateY(0); opacity: 0; }
+    40%  { transform: translateY(-8px); opacity: 1; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25%      { transform: rotate(-3deg); }
+    75%      { transform: rotate(3deg); }
+  }
+
+  /* 접근성: 모션 줄이기 */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+
+════════════════════════════════════════════════════════════════
+VII. 컴포넌트 인덱스
+════════════════════════════════════════════════════════════════
+
+
+────────────────────────────────────────────────────────────────
+전체 인터페이스 컴포넌트 목록
+────────────────────────────────────────────────────────────────
+
+  ID       컴포넌트명                CSS 파일          Phase
+  ═══════════════════════════════════════════════════════════
+  IF-001   공통 헤더                 style.css         P1
+  IF-002   위기 상담 안내 푸터       style.css         P1
+  IF-003   주요 액션 버튼            style.css         P1
+  IF-004   보조 액션 버튼            style.css         P1
+  IF-005   진행률 바                 style.css         P1
+  IF-010   캐릭터 + 말풍선           character.css     P1
+  IF-011   캐릭터 :checked 반응      character.css     P1
+  IF-020   Radio 단일 선택           workshop.css      P1
+  IF-021   Checkbox 복수 선택        workshop.css      P1
+  IF-022   리커트 5점 척도           workshop.css      P2
+  IF-023   카드 2×2 선택             workshop.css      P2
+  IF-024   슬라이더 (Range)          workshop.css      P1
+  IF-025   탭 전환                   workshop.css      P2
+  IF-026   Textarea 자유 서술        workshop.css      P1
+  IF-030   결과 카드                 result-card.css   P1
+  IF-031   검열자 대응 메시지        result-card.css   P1
+  IF-032   실천 가이드               result-card.css   P1
+  IF-033   다음 워크숍 추천          result-card.css   P1
+  IF-034   체험 유형 뱃지            character.css     P2
+  IF-040   SNS 공유 영역             style.css         P1
+  IF-050   반응형 레이아웃           style.css         P1
+  IF-051   카테고리 테마             style.css         P1
+  IF-052   애니메이션 정의           style.css         P1
+  ═══════════════════════════════════════════════════════════
+  합계: 23개 컴포넌트
+
+
+================================================================
+  본 인터페이스 명세서는 v1.0이며,
+  모든 UI 컴포넌트의 HTML 구조, CSS 속성, 상태 변화를
+  코딩 즉시 구현 가능한 수준으로 정의했습니다.
+
+  참조 문서:
+  - 와이어프레임 v2.0
+  - 어플리케이션아키텍처 v1.0
+  - 요구사항정의서 v1.0
+  - 용어사전 v1.0
+================================================================

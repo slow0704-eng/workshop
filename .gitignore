@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Local-only directories
+백업/
+단위테스트결과/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
