@@ -1,3 +1,15 @@
+<!--
+  =================================================
+  마음 워크숍 — 5년 후 엽서 워크숍
+  =================================================
+  역할: 5년 후 나에게 보내는 엽서 (5분, 골라쓰기)
+  경로: src/workshop/5년후엽서.html
+  의존: ../data/5년후엽서.js
+        ../js/layout.js
+        ../js/renderer.js
+        ../js/result.js
+  =================================================
+-->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -19,30 +31,14 @@
 </head>
 <body class="category-career">
 
-<header class="header">
-  <a href="../index.html" class="header__logo">
-    <span class="maumi-placeholder" style="width:20px;height:20px;font-size:10px;">◡</span>
-    <span>마음 워크숍</span>
-  </a>
-  <a href="../index.html" class="header__home">홈</a>
-</header>
+<header id="site-header"></header>
 
 <main id="app"></main>
 
-<footer class="site-footer">
-  <div class="footer-info">
-    <p class="footer-info__org">모닝페이지 동아리</p>
-    <p class="footer-info__contact">장형우 · <a href="mailto:slow0704@gmail.com">slow0704@gmail.com</a></p>
-  </div>
-  <div class="footer-support">
-    <p class="footer-support__text">마음이 힘들 때는 전문가와 이야기해보세요</p>
-    <a href="https://www.mentalhealth.go.kr" target="_blank" rel="noopener" class="footer-support__link">정신건강복지센터 무료 상담 →</a>
-    <span class="footer-support__tel">위기상담 <a href="tel:1577-0199">1577-0199</a></span>
-  </div>
-  <p class="footer-disclaimer">본 서비스는 전문 의료 서비스가 아닙니다.</p>
-</footer>
+<footer id="site-footer"></footer>
 
 <noscript><div style="padding:16px 24px;background:#FFF3E0;color:#E65100;font-size:13px;text-align:center;border-radius:8px;margin:16px 24px;">워크숍을 이용하려면 JavaScript를 활성화해주세요.</div></noscript>
+<script src="../js/layout.js"></script>
 <script src="../data/5년후엽서.js"></script>
 <script src="../js/renderer.js"></script>
 <script src="../js/result.js"></script>

@@ -1,3 +1,14 @@
+<!--
+  =================================================
+  마음 워크숍 — 소개
+  =================================================
+  역할: 서비스 소개 · 영감 출처 · 프라이버시 정책 안내
+  경로: src/about.html
+  의존: ./css/style.css
+        ./css/character.css
+        ./js/layout.js
+  =================================================
+-->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -16,10 +27,7 @@
 </head>
 <body class="category-emotion">
 
-<header class="header">
-  <a href="./index.html" class="header__logo"><span class="maumi-placeholder" style="width:20px;height:20px;font-size:10px;">◡</span><span>마음 워크숍</span></a>
-  <a href="./index.html" class="header__home">홈</a>
-</header>
+<header id="site-header"></header>
 
 <main>
   <div style="padding-top:48px;text-align:center;">
@@ -85,18 +93,8 @@
   </div>
 </main>
 
-<footer class="site-footer">
-  <div class="footer-info">
-    <p class="footer-info__org">모닝페이지 동아리</p>
-    <p class="footer-info__contact">장형우 · <a href="mailto:slow0704@gmail.com">slow0704@gmail.com</a></p>
-  </div>
-  <div class="footer-support">
-    <p class="footer-support__text">마음이 힘들 때는 전문가와 이야기해보세요</p>
-    <a href="https://www.mentalhealth.go.kr" target="_blank" rel="noopener" class="footer-support__link">정신건강복지센터 무료 상담 →</a>
-    <span class="footer-support__tel">위기상담 <a href="tel:1577-0199">1577-0199</a></span>
-  </div>
-  <p class="footer-disclaimer">본 서비스는 전문 의료 서비스가 아닙니다.</p>
-</footer>
+<footer id="site-footer"></footer>
 
+<script src="./js/layout.js"></script>
 </body>
 </html>

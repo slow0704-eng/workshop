@@ -41,8 +41,9 @@
   function renderCharacterGuide(face, text, style) {
     var wrapper = h('div', { className: 'character-guide' });
     if (style) wrapper.setAttribute('style', style);
-    wrapper.appendChild(h('span', { className: 'maumi-placeholder', textContent: face }));
-    var bubble = h('div', { className: 'speech-bubble', htmlContent: text.replace(/\n/g, '<br>') });
+    wrapper.appendChild(h('span', { className: 'maumi-placeholder', textContent: face || '◡' }));
+    var safeText = text == null ? '' : String(text);
+    var bubble = h('div', { className: 'speech-bubble', htmlContent: safeText.replace(/\n/g, '<br>') });
     wrapper.appendChild(bubble);
     return wrapper;
   }
@@ -399,8 +400,45 @@
         }
       });
 
-      // 반응 (형제로 삽입)
-      (q.reactions || []).forEach(function (r) {
+      // 반응 (형제로 삽입) — 세 가지 데이터 패턴 정규화 후 렌더
+      //   1) q.reactions = [{ triggerId, reactionId, face, text }, ...]
+      //   2) q.reactions = { triggerId: { id?, expression|face, speech|text }, ... }
+      //   3) options[].reaction = { id?, expression|face, speech|text }  (옵션 인라인)
+      var reactionList = [];
+
+      (q.options || []).forEach(function (opt) {
+        if (opt.reaction) {
+          reactionList.push({
+            triggerId: opt.id,
+            reactionId: opt.reaction.id || ('r-' + opt.id),
+            face: opt.reaction.face || opt.reaction.expression || '◡',
+            text: opt.reaction.text || opt.reaction.speech || ''
+          });
+        }
+      });
+
+      if (Array.isArray(q.reactions)) {
+        q.reactions.forEach(function (r) {
+          reactionList.push({
+            triggerId: r.triggerId,
+            reactionId: r.reactionId,
+            face: r.face,
+            text: r.text
+          });
+        });
+      } else if (q.reactions && typeof q.reactions === 'object') {
+        Object.keys(q.reactions).forEach(function (triggerId) {
+          var r = q.reactions[triggerId];
+          reactionList.push({
+            triggerId: triggerId,
+            reactionId: r.id || ('r-' + triggerId),
+            face: r.face || r.expression || '◡',
+            text: r.text || r.speech || ''
+          });
+        });
+      }
+
+      reactionList.forEach(function (r) {
         container.appendChild(renderReaction(r.reactionId, r.face, r.text));
         cssRules.push('#' + r.triggerId + ':checked ~ #' + r.reactionId + ' { display:block; }');
       });
