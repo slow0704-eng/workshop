@@ -1,6 +1,7 @@
 /* ================================================
    마음 워크숍 — 데이터 시트
    나의 강점 발견 (category: esteem)
+   v3: 3영역 9개 → VIA 6영역 18개 (지혜·용기·인간애·정의·절제·초월)
    ================================================ */
 
 window.WORKSHOP = {
@@ -24,29 +25,30 @@ window.WORKSHOP = {
       nextLabel: "같이 해보자! →"
     },
 
-    // ── 2. 탐색 ──
+    // ── 2. 탐색 (VIA 6영역) ──
     {
       type: "explore",
       id: "explore",
       expression: "◠",
-      speech: "강점에는 여러 영역이 있어. 천천히 살펴봐.",
+      speech: "강점에는 6가지 영역이 있어. 천천히 살펴봐.",
       cards: [
-        { icon: "lightbulb", title: "지혜", body: "배우고 생각하는 힘. 호기심, 창의력, 판단력, 학습 의욕." },
-        { icon: "shield", title: "용기", body: "어려운 상황에서 행동하는 힘. 용감함, 끈기, 정직, 열정." },
-        { icon: "favorite", title: "사랑", body: "사람과 연결되는 힘. 친절, 공감, 관대함, 배려." },
-        { icon: "balance", title: "정의", body: "공동체에 기여하는 힘. 공정함, 리더십, 팀워크." },
-        { icon: "self_improvement", title: "절제", body: "균형을 유지하는 힘. 자기 조절, 신중함, 겸손." },
-        { icon: "auto_awesome", title: "초월", body: "의미를 발견하는 힘. 감사, 유머, 희망, 영성." }
+        { icon: "lightbulb",        title: "지혜",   body: "배우고 생각하는 힘. 호기심, 창의력, 판단력, 학습 의욕." },
+        { icon: "shield",           title: "용기",   body: "어려운 상황에서 행동하는 힘. 용감함, 끈기, 정직, 열정." },
+        { icon: "favorite",         title: "인간애", body: "사람과 연결되는 힘. 친절, 공감, 관대함, 배려." },
+        { icon: "balance",          title: "정의",   body: "공동체에 기여하는 힘. 공정함, 리더십, 팀워크." },
+        { icon: "self_improvement", title: "절제",   body: "균형을 유지하는 힘. 자기 조절, 신중함, 겸손." },
+        { icon: "auto_awesome",     title: "초월",   body: "의미를 발견하는 힘. 감사, 유머, 희망, 영성." }
       ],
       nextId: "exp-wisdom"
     },
 
-    // ── 3. 체험: 지혜 ──
+    // ── 3. 지혜 ──
     {
       type: "experience",
       id: "exp-wisdom",
+      progress: { current: 1, total: 6 },
       expression: "◡",
-      speech: "나에게 해당하는 거 다 골라봐!",
+      speech: "지혜 영역이야. 해당하는 거 다 골라봐!",
       questions: [{
         id: "wisdom",
         type: "checkbox",
@@ -61,12 +63,13 @@ window.WORKSHOP = {
       nextId: "exp-courage"
     },
 
-    // ── 4. 체험: 용기 ──
+    // ── 4. 용기 ──
     {
       type: "experience",
       id: "exp-courage",
+      progress: { current: 2, total: 6 },
       expression: "◠",
-      speech: "잘하고 있어. 계속 골라봐!",
+      speech: "용기 영역! 어려운 상황에서의 나를 떠올려봐.",
       questions: [{
         id: "courage",
         type: "checkbox",
@@ -81,16 +84,17 @@ window.WORKSHOP = {
       nextId: "exp-love"
     },
 
-    // ── 5. 체험: 사랑 ──
+    // ── 5. 인간애 ──
     {
       type: "experience",
       id: "exp-love",
+      progress: { current: 3, total: 6 },
       expression: "◡",
-      speech: "마지막이야. 편하게 골라봐.",
+      speech: "사람들과 어떻게 지내는지 떠올려봐.",
       questions: [{
         id: "love",
         type: "checkbox",
-        title: "사랑 — 사람과 연결되는 힘",
+        title: "인간애 — 사람과 연결되는 힘",
         titleIcon: "favorite",
         options: [
           { id: "s7", text: "다른 사람을 잘 챙기는 편이다" },
@@ -98,10 +102,73 @@ window.WORKSHOP = {
           { id: "s9", text: "사람들과 함께 있으면 에너지가 난다" }
         ]
       }],
+      nextId: "exp-justice"
+    },
+
+    // ── 6. 정의 ──
+    {
+      type: "experience",
+      id: "exp-justice",
+      progress: { current: 4, total: 6 },
+      expression: "◠",
+      speech: "공동체 안에서의 나를 떠올려봐.",
+      questions: [{
+        id: "justice",
+        type: "checkbox",
+        title: "정의 — 공동체에 기여하는 힘",
+        titleIcon: "balance",
+        options: [
+          { id: "s10", text: "공평한 걸 중요하게 여긴다" },
+          { id: "s11", text: "함께 일할 때 분위기를 살린다" },
+          { id: "s12", text: "옳다고 믿는 일을 말하는 편이다" }
+        ]
+      }],
+      nextId: "exp-temperance"
+    },
+
+    // ── 7. 절제 ──
+    {
+      type: "experience",
+      id: "exp-temperance",
+      progress: { current: 5, total: 6 },
+      expression: "◡",
+      speech: "한 발 물러서서 자신을 다스리는 모습 떠올려봐.",
+      questions: [{
+        id: "temperance",
+        type: "checkbox",
+        title: "절제 — 균형을 유지하는 힘",
+        titleIcon: "self_improvement",
+        options: [
+          { id: "s13", text: "충동적으로 결정하지 않으려 한다" },
+          { id: "s14", text: "부족함을 알고 인정한다" },
+          { id: "s15", text: "욱하지 않고 한 박자 쉰다" }
+        ]
+      }],
+      nextId: "exp-transcendence"
+    },
+
+    // ── 8. 초월 ──
+    {
+      type: "experience",
+      id: "exp-transcendence",
+      progress: { current: 6, total: 6 },
+      expression: "◠",
+      speech: "마지막 영역이야. 편하게 골라봐.",
+      questions: [{
+        id: "transcendence",
+        type: "checkbox",
+        title: "초월 — 의미를 발견하는 힘",
+        titleIcon: "auto_awesome",
+        options: [
+          { id: "s16", text: "작은 일에도 감사할 때가 있다" },
+          { id: "s17", text: "힘들 때 유머가 도움이 된다" },
+          { id: "s18", text: "\"다 의미가 있다\"고 생각할 때가 있다" }
+        ]
+      }],
       nextId: null
     },
 
-    // ── 6. 결과 ──
+    // ── 9. 결과 ──
     { type: "result", id: "result" }
   ],
 
@@ -111,7 +178,12 @@ window.WORKSHOP = {
     zeroMessage: "아직 잘 모르겠어도 괜찮아.<br>강점은 천천히<br>발견할 수 있어.",
     zeroSpeech: "지금 모르겠어도 괜찮아. 살다 보면 자연스럽게 발견하게 될 거야.",
     foundMessage: "{count}개의 강점을 발견했어요!",
-    foundSpeech: "방금 체크한 것들, 전부 네 강점이야.<br>혹시 몰랐다면, 이제 기억해둬."
+    foundSpeech: "방금 체크한 것들, 전부 네 강점이야.<br>혹시 몰랐다면, 이제 기억해둬.",
+    tiers: [
+      { min: 11, label: "강점 부자",     speech: "이 정도면 강점 부자네! 자신감 가져도 돼." },
+      { min: 6,  label: "다채로운 강점", speech: "영역도 다양해. 이 균형 자체가 강점이야." },
+      { min: 1,  label: "발견한 강점",   speech: "여기서부터 시작해도 충분해." }
+    ]
   },
 
   guide: {
@@ -119,7 +191,7 @@ window.WORKSHOP = {
     items: [
       "오늘 체크한 강점 중 하나를 메모에 적어두기",
       "이 강점을 쓴 최근 경험 하나 떠올려보기",
-      "가까운 사람에게 '내 강점이 뭐 같아?' 물어보기"
+      "가까운 사람에게 \"내 강점이 뭐 같아?\" 물어보기"
     ]
   },
 

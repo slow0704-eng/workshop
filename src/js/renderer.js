@@ -147,19 +147,23 @@
     var card = h('div', { className: cardClass });
 
     card.appendChild(h('span', { className: 'result-card__decoration', textContent: '— · —' }));
-    card.appendChild(h('span', { className: 'result-card__title', textContent: data.title || '' }));
+    card.appendChild(h('span', { className: 'result-card__title', textContent: data.title || data.cardTitle || '' }));
 
     var main = h('div', { className: 'result-card__main' });
     if (data.number) main.appendChild(h('span', { className: 'result-card__number', textContent: data.number }));
-    if (data.emoji) {
+
+    // emoji 또는 svg 필드 처리
+    var emojiSrc = data.emoji || data.svg;
+    var emojiType = data.emojiType || (data.svg && !data.emoji ? 'svg' : null);
+    if (emojiSrc) {
       var emojiSpan = h('span', { className: 'result-card__emoji' });
-      if (data.emojiType === 'svg' || (data.emoji.indexOf('<svg') > -1)) {
-        emojiSpan.innerHTML = data.emoji;
+      if (emojiType === 'svg' || emojiSrc.indexOf('<svg') > -1) {
+        emojiSpan.innerHTML = emojiSrc;
         emojiSpan.setAttribute('style', 'font-size:48px;line-height:0;');
-      } else if (data.emojiType === 'material') {
-        emojiSpan.appendChild(renderMaterialIcon(data.emoji, true, 'font-size:48px;color:' + (data.emojiColor || 'var(--color)') + ';'));
+      } else if (emojiType === 'material') {
+        emojiSpan.appendChild(renderMaterialIcon(emojiSrc, true, 'font-size:48px;color:' + (data.emojiColor || 'var(--color)') + ';'));
       } else {
-        emojiSpan.textContent = data.emoji;
+        emojiSpan.textContent = emojiSrc;
         emojiSpan.setAttribute('style', 'font-size:48px;');
       }
       main.appendChild(emojiSpan);
@@ -174,11 +178,18 @@
     padDiv.appendChild(card);
     outer.appendChild(padDiv);
 
-    // 카드 뒤 캐릭터 대사
+    // 카드 뒤 캐릭터 대사 — face/expression, text/speech 양쪽 지원
     if (data.speeches) {
       data.speeches.forEach(function (s) {
-        var g = renderCharacterGuide(s.face, s.text, 'margin-top:' + (s.marginTop || '20px') + ';');
+        var face = s.face || s.expression || '◡';
+        var text = s.text || s.speech || '';
+        var styleStr = 'margin-top:' + (s.marginTop || '20px') + ';';
+        if (typeof s.style === 'string') styleStr += s.style;
+        var g = renderCharacterGuide(face, text, styleStr);
         if (s.fontSize) g.querySelector('.speech-bubble').style.fontSize = s.fontSize;
+        if (s.style && typeof s.style === 'object' && s.style.fontSize) {
+          g.querySelector('.speech-bubble').style.fontSize = s.style.fontSize;
+        }
         outer.appendChild(g);
       });
     }
@@ -252,10 +263,12 @@
       optList.appendChild(renderRadioOption(opt, cfg.selectTab.name));
     });
 
-    // 골라 쓰기 반응
+    // 골라 쓰기 반응 — face/expression, text/speech 양쪽 지원
     if (cfg.selectTab.reaction) {
       var r = cfg.selectTab.reaction;
-      optList.appendChild(renderReaction(r.id, r.face, r.text));
+      var rFace = r.face || r.expression || '◡';
+      var rText = r.text || r.speech || '';
+      optList.appendChild(renderReaction(r.id, rFace, rText));
       // :checked CSS 규칙
       var rules = cfg.selectTab.options.map(function (o) {
         return '#' + o.id + ':checked ~ #' + r.id + ' { display:block; }';
@@ -443,13 +456,26 @@
         cssRules.push('#' + r.triggerId + ':checked ~ #' + r.reactionId + ' { display:block; }');
       });
 
-      // 결과 블록 (형제로 삽입)
+      // 결과 블록 (형제로 삽입) — items[] / 직접 / card 하위 모두 지원
       if (q.resultMap) {
         Object.keys(q.resultMap).forEach(function (optId) {
           var resId = q.resultMap[optId];
-          var resData = ws.results[resId];
-          if (resData && resData.card) {
-            container.appendChild(renderResultBlock(resId, resData.card, ws.category));
+          var resData = null;
+          if (ws.results) {
+            if (ws.results.items && ws.results.items[resId]) {
+              resData = ws.results.items[resId];
+            } else if (ws.results[resId]) {
+              resData = ws.results[resId].card || ws.results[resId];
+            }
+          }
+          if (resData) {
+            // cardTitle을 데이터에 주입 (개별 title 없을 때 fallback)
+            var blockData = {};
+            Object.keys(resData).forEach(function (k) { blockData[k] = resData[k]; });
+            if (!blockData.title) {
+              blockData.title = resData.cardTitle || (ws.results && ws.results.cardTitle) || '';
+            }
+            container.appendChild(renderResultBlock(resId, blockData, ws.category));
           }
           cssRules.push('#' + optId + ':checked ~ #' + resId + ' { display:block; }');
         });
